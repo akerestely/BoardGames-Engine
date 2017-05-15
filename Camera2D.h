@@ -22,7 +22,7 @@ namespace Engine
 		//getters
 		glm::vec2 GetPosition() { return position; }
 		float GetScale() { return scale; }
-		glm::mat4 GetCameraMatrix() { return cameraMatrix; }
+		const glm::mat4& GetCameraMatrix() const { return cameraMatrix; }
 	private:
 		int screenWidth, screenHeight;
 		bool needsUpdate;
