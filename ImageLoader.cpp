@@ -1,3 +1,4 @@
+#include "BaseTypes.h"
 #include "ImageLoader.h"
 
 #include "picoPNG.h"
@@ -10,8 +11,8 @@ namespace Engine
 {
 	GLTexture texture = {};
 
-	std::vector<unsigned char> in;
-	std::vector<unsigned char> out;
+	std::vector<byte> in;
+	std::vector<byte> out;
 	unsigned long width, height;
 
 	if(!IOManager::ReadFileToBuffer(filePath, in))

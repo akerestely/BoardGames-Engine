@@ -1,6 +1,7 @@
+#include "BaseTypes.h"
 #include "Timing.h"
 
-#include <SDl/SDL.h>
+#include "SDl/SDL.h"
 
 namespace Engine
 {
@@ -29,9 +30,9 @@ namespace Engine
 	{
 		calculateFps();
 
-		float frameTicks = SDL_GetTicks() - startTicks;
+		float frameTicks = float(SDL_GetTicks() - startTicks);
 		if(1000.0f / maxFps > frameTicks)
-			SDL_Delay(1000.0f / maxFps - frameTicks);
+			SDL_Delay(uint(1000.0f / maxFps - frameTicks));
 
 		return fps;
 	}
@@ -42,10 +43,10 @@ namespace Engine
 		static float frameTimes[NUM_SAMPLES];
 		static int currentFrame = 0;
 
-		static float prevTicks = SDL_GetTicks();
+		static float prevTicks = (float)SDL_GetTicks();
 
 		float currentTicks;
-		currentTicks = SDL_GetTicks();
+		currentTicks = (float)SDL_GetTicks();
 
 		frameTime = currentTicks - prevTicks;
 		frameTimes[currentFrame % NUM_SAMPLES] = frameTime;

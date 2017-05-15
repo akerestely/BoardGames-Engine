@@ -1,3 +1,4 @@
+#include "BaseTypes.h"
 #include "SpriteBatch.h"
 #include <algorithm>
 
@@ -29,7 +30,7 @@ namespace Engine
 	void SpriteBatch::End()
 	{
 		glyphPointers.resize(glyphs.size());
-		for(int i=0; i<glyphs.size(); i++)
+		for(uint i=0; i<glyphs.size(); i++)
 			glyphPointers[i] = &glyphs[i];
 
 		sortGlyphs();
@@ -47,7 +48,7 @@ namespace Engine
 	{
 		/*opengl > 3*/ //glBindVertexArray(vao);
 		/*opengl 2.1*/ bindBufferAndAttribs();
-		for (int i=0; i< renderBatches.size(); i++)
+		for (uint i=0; i< renderBatches.size(); i++)
 		{
 			glBindTexture(GL_TEXTURE_2D, renderBatches[i].texture);
 			glDrawArrays(GL_TRIANGLES, renderBatches[i].offset, renderBatches[i].numVertices);
@@ -77,7 +78,7 @@ namespace Engine
 		vertices[cv++] = glyphPointers[0]->topLeft;
 		offset += 6;
 
-		for(int cg=1; cg<glyphPointers.size(); cg++)
+		for(uint cg=1; cg<glyphPointers.size(); cg++)
 		{
 			if(glyphPointers[cg]->texture != glyphPointers[cg-1]->texture)
 			{

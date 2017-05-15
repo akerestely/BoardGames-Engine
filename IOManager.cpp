@@ -1,9 +1,10 @@
+#include "BaseTypes.h"
 #include "IOManager.h"
 #include <fstream>
 
 namespace Engine
 {
-	bool IOManager::ReadFileToBuffer(char* filepath, std::vector<unsigned char>& buffer)
+	bool IOManager::ReadFileToBuffer(char* filepath, std::vector<byte>& buffer)
 	{
 		std::ifstream file(filepath, std::ios::binary);
 		if (file.fail())
