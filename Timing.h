@@ -1,4 +1,5 @@
 #pragma once
+#include "BaseTypes.h"
 
 namespace Engine
 {
@@ -6,20 +7,25 @@ namespace Engine
 	{
 	public:
 		FpsLimiter();
-		void Init(float targetFps);
+		void Init(uint targetFps);
 
-		void SetMaxFps(float targetFps);
+		void SetMaxFps(uint targetFps);
 
 		void Begin();
 
 		//will return current fps
 		float End();
 	private:
-		void calculateFps();
+		// returns fps
+		float calculateFps();
 
-		float fps;
-		float maxFps;
-		float frameTime;
-		unsigned int startTicks;
+		static const int kNumSamples = 10;
+		uint frameTimes[kNumSamples];
+
+		uint maxFps;
+		float maxFrameTime;
+
+		uint startTicks;
+		int currentFrame;
 	};
 }

@@ -1,7 +1,8 @@
-#include "BaseTypes.h"
 #include "Timing.h"
 
+#include <cstring>
 #include "SDl/SDL.h"
+#include <algorithm>
 
 namespace Engine
 {
@@ -10,15 +11,17 @@ namespace Engine
 
 	}
 
-	void FpsLimiter::Init(float maxFps)
+	void FpsLimiter::Init(uint targetFps)
 	{
-		SetMaxFps( maxFps);
+		currentFrame = 0;
+		memset(frameTimes, 0, sizeof(frameTimes));
+		SetMaxFps(targetFps);
 	}
 
-
-	void FpsLimiter::SetMaxFps(float maxFps)
+	void FpsLimiter::SetMaxFps(uint targetFps)
 	{
-		this->maxFps = maxFps;
+		maxFps = targetFps;
+		maxFrameTime = 1000.f / maxFps;
 	}
 
 	void FpsLimiter::Begin()
@@ -28,47 +31,29 @@ namespace Engine
 
 	float FpsLimiter::End()
 	{
-		calculateFps();
+		uint currentTicks = SDL_GetTicks();
+		uint frameTime = currentTicks - startTicks;
+		if (frameTime < maxFrameTime)
+		{
+			uint msToWait = (uint)maxFrameTime - frameTime;
+			SDL_Delay(msToWait);
+			// calculate new frame time, as we slept some time (this should be ~maxFrameTime)
+			currentTicks = SDL_GetTicks();
+			frameTime = currentTicks - startTicks;
+		}
 
-		float frameTicks = float(SDL_GetTicks() - startTicks);
-		if(1000.0f / maxFps > frameTicks)
-			SDL_Delay(uint(1000.0f / maxFps - frameTicks));
+		frameTimes[currentFrame++ % kNumSamples] = frameTime;
 
-		return fps;
+		return calculateFps();
 	}
 
-	void FpsLimiter::calculateFps()
+	float FpsLimiter::calculateFps()
 	{
-		static const int NUM_SAMPLES = 10;
-		static float frameTimes[NUM_SAMPLES];
-		static int currentFrame = 0;
-
-		static float prevTicks = (float)SDL_GetTicks();
-
-		float currentTicks;
-		currentTicks = (float)SDL_GetTicks();
-
-		frameTime = currentTicks - prevTicks;
-		frameTimes[currentFrame % NUM_SAMPLES] = frameTime;
-
-		prevTicks = currentTicks;
-
-		int count;
-		currentFrame++;
-		if(currentFrame < NUM_SAMPLES)
-			count = currentFrame;
-		else
-			count = NUM_SAMPLES;
-
 		float frameTimeAverage = 0;
-		for(int i=0; i<count; i++)
-			frameTimeAverage += frameTimes[i];
-		frameTimeAverage /= count;
+		for (int frameTime : frameTimes)
+			frameTimeAverage += (float)frameTime;
+		frameTimeAverage /= std::min(currentFrame, kNumSamples);
 
-		if(frameTimeAverage>0)
-			fps = 1000.0f / frameTimeAverage;
-		else
-			fps = 0;
+		return 1000.0f / frameTimeAverage;
 	}
-
 }

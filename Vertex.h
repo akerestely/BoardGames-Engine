@@ -1,4 +1,5 @@
 #pragma once
+#include "BaseTypes.h"
 
 namespace Engine
 {
@@ -10,11 +11,11 @@ namespace Engine
 
 	struct ColorRGBA8
 	{
-		GLubyte r;
-		GLubyte g;
-		GLubyte b;
-		GLubyte a;
-		ColorRGBA8(GLubyte r=255, GLubyte b=255, GLubyte g=255, GLubyte a=255) :r(r), g(g), b(b), a(a)
+		byte r;
+		byte g;
+		byte b;
+		byte a;
+		ColorRGBA8(byte r=255, byte b=255, byte g=255, byte a=255) :r(r), g(g), b(b), a(a)
 		{
 		}
 	};
@@ -37,7 +38,7 @@ namespace Engine
 			position.y=y;
 		}
 
-		void SetColor(GLubyte r, GLubyte g, GLubyte b, GLubyte a)
+		void SetColor(byte r, byte g, byte b, byte a)
 		{
 			color.r = r;
 			color.g = g;
