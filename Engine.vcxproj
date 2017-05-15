@@ -26,6 +26,7 @@
     <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="IOManager.cpp" />
+    <ClCompile Include="Logger.cpp" />
     <ClCompile Include="picoPNG.cpp" />
     <ClCompile Include="ResourceMngr.cpp" />
     <ClCompile Include="Sprite.cpp" />
@@ -43,6 +44,7 @@
     <ClInclude Include="ImageLoader.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="IOManager.h" />
+    <ClInclude Include="Logger.h" />
     <ClInclude Include="picoPNG.h" />
     <ClInclude Include="ResourceMngr.h" />
     <ClInclude Include="Sprite.h" />
