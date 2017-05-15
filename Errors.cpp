@@ -1,12 +1,11 @@
 #include "Errors.h"
-#include <iostream>
 #include <sdl/SDL.h>
 
 namespace Engine
 {
-	void fatalError(char* msg)
+	extern void fatalError(const std::string &msg)
 	{
-		std::cout<<msg<<'\n';
+		printf("%s\n", msg.c_str());
 		system("pause");
 		SDL_Quit();
 		exit(1);

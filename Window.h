@@ -1,6 +1,6 @@
 #pragma once
-#include <gl/glew.h>
-#include <sdl/SDL.h>
+#include "GL/glew.h"
+#include "sdl/SDL.h"
 #undef main
 
 namespace Engine
