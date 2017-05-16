@@ -46,6 +46,7 @@
     <ClInclude Include="IOManager.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="picoPNG.h" />
+    <ClInclude Include="Rectangle.h" />
     <ClInclude Include="ResourceMngr.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteBatch.h" />
