@@ -2,10 +2,9 @@
 
 namespace Engine
 {
-	InputManager::InputManager(void) : mouseCoords(0.0f)
+	InputManager::InputManager(void) : mouseCoords(0), mouseCoordsRel(0)
 	{
 	}
-
 
 	InputManager::~InputManager(void)
 	{
@@ -13,26 +12,44 @@ namespace Engine
 
 	void InputManager::PressKey(unsigned int keyID)
 	{
-		keyMap[keyID] = true;
+		keyMap[keyID].pressed = true;
 	}
 
 	void InputManager::ReleaseKey(unsigned int keyID)
 	{
-		keyMap[keyID] = false;
+		keyMap[keyID].pressed = false;
+		keyMap[keyID].usedOnce = false;
 	}
 
 	bool InputManager::IsKeyDown(unsigned int keyID)
 	{
 		auto it = keyMap.find(keyID);
-		if(it != keyMap.end())
-			return it->second;
+		if (it != keyMap.end())
+			return it->second.pressed;
 		return false;
 	}
 
-	void InputManager::SetMouseCoords(float x, float y)
+	bool InputManager::IsKeyDownOnce(unsigned int keyID)
 	{
-		mouseCoords.x=x;
-		mouseCoords.y=y;
+		auto it = keyMap.find(keyID);
+		if (it != keyMap.end())
+			if (it->second.pressed && !it->second.usedOnce)
+			{
+				it->second.usedOnce = true;
+				return true;
+			}
+		return false;
 	}
 
+	void InputManager::SetMouseCoords(int x, int y)
+	{
+		mouseCoords.x = x;
+		mouseCoords.y = y;
+	}
+
+	void InputManager::SetMouseCoordsRel(int x, int y)
+	{
+		mouseCoordsRel.x = x;
+		mouseCoordsRel.y = y;
+	}
 }

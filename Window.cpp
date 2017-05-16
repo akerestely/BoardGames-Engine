@@ -14,7 +14,7 @@ namespace Engine
 	{
 	}
 
-	void Window::Create(char* windowTitle, int screenWidth, int screenHeight, unsigned int currentFlags)
+	void Window::Create(char* windowTitle, uint screenWidth, uint screenHeight, uint currentFlags)
 	{
 		Uint32 flags = SDL_WINDOW_OPENGL;
 		if (currentFlags & INVISIBLE)
@@ -44,12 +44,25 @@ namespace Engine
 		//set v-sync
 		SDL_GL_SetSwapInterval(0);
 
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glEnable(GL_BLEND);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 
 	void Window::SwappBuffer()
 	{
 		SDL_GL_SwapWindow(sdlWindow);
+	}
+
+	bool Window::IsFullscreen()
+	{
+		return SDL_GetWindowFlags(sdlWindow) & SDL_WINDOW_FULLSCREEN;
+	}
+
+	void Window::Fullscreen(bool visibility)
+	{
+		if (visibility)
+			SDL_SetWindowFullscreen(sdlWindow, SDL_WINDOW_FULLSCREEN);
+		else
+			SDL_SetWindowFullscreen(sdlWindow, 0);
 	}
 }

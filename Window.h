@@ -1,4 +1,5 @@
 #pragma once
+#include "BaseTypes.h"
 #include "GL/glew.h"
 #include "sdl/SDL.h"
 #undef main
@@ -13,16 +14,19 @@ namespace Engine
 		Window(void);
 		~Window(void);
 
-		void Create(char* windowTitle, int screenWidth, int screenHeight, unsigned int currentFlags);
+		void Create(char* windowTitle, uint screenWidth, uint screenHeight, uint currentFlags);
 
 		void SwappBuffer();
 
-		int GetScreenWidth();
-		int GetScreenHeight();
+		bool IsFullscreen();
+		void Fullscreen(bool visibility);
+
+		uint GetScreenWidth() { return screenWidth; }
+		uint GetScreenHeight() { return screenHeight; }
 
 	private:
 		SDL_Window *sdlWindow;
-		int screenWidth, screenHeight;
+		uint screenWidth, screenHeight;
 	};
 }
 
