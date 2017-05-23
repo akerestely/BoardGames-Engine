@@ -2,6 +2,7 @@
 
 #include "Errors.h"
 #include <stdio.h>
+#include "SDl\SDL_video.h"
 
 namespace Engine
 {

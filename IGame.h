@@ -21,6 +21,7 @@ namespace Engine
 
 		void setMaxFps();
 		float getFps() const { return m_fps; }
+		uint getTime() const;
 
 	protected:
 		uint m_screenWidth = 800;

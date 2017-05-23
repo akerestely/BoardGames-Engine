@@ -9,17 +9,40 @@ namespace Engine
 		bool usedOnce;
 		ButtonState() : pressed(false), usedOnce(false) {}
 	};
+
+	enum class Key
+	{
+		A,
+		D,
+		E,
+		Q,
+		S,
+		W,
+
+		Space,
+		Esc,
+		F1,
+		F4,
+
+		NumpadPlus,
+		NumpadMinus,
+
+		LeftMouseButton,
+		MiddleMouseButton,
+		RightMouseButton
+	};
+
 	class InputManager
 	{
 	public:
 		InputManager(void);
 		~InputManager(void);
 
-		void PressKey(unsigned int keyID);
-		void ReleaseKey(unsigned int keyID);
+		void PressKey(uint keyID);
+		void ReleaseKey(uint keyID);
 
-		bool IsKeyDown(unsigned int keyID);
-		bool IsKeyDownOnce(unsigned int keyID);
+		bool IsKeyDown(Key keyID);
+		bool IsKeyDownOnce(Key keyID);
 
 		void SetMouseCoords(int x, int y);
 		void SetMouseCoordsRel(int x, int y);
@@ -28,7 +51,7 @@ namespace Engine
 		glm::ivec2 GetMouseCoordsRel() const { return mouseCoordsRel; }
 
 	private:
-		std::unordered_map<unsigned int, ButtonState> keyMap;
+		std::unordered_map<uint, ButtonState> keyMap;
 		glm::ivec2 mouseCoords;
 		glm::ivec2 mouseCoordsRel;
 	};

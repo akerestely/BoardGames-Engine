@@ -1,5 +1,7 @@
 #include "IGame.h"
 #include "Engine.h"
+#include "SDl\SDL_events.h"
+#include "SDl\SDL_timer.h"
 
 namespace Engine
 {
@@ -14,15 +16,20 @@ namespace Engine
 
 	void IGame::handleDefaultInput()
 	{
-		if (m_inputManager.IsKeyDownOnce(SDLK_ESCAPE))
+		if (m_inputManager.IsKeyDownOnce(Key::Esc))
 			m_gameState = State::Exiting;
-		if (m_inputManager.IsKeyDownOnce(SDLK_F4))
+		if (m_inputManager.IsKeyDownOnce(Key::F4))
 			m_window.Fullscreen(!m_window.IsFullscreen());
 	}
 
 	void IGame::setMaxFps()
 	{
 		m_fpsLimiter.SetMaxFps(m_maxFps);
+	}
+
+	uint IGame::getTime() const
+	{
+		return SDL_GetTicks();
 	}
 
 	void IGame::initSystems()

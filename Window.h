@@ -1,8 +1,9 @@
 #pragma once
 #include "BaseTypes.h"
 #include "GL/glew.h"
-#include "sdl/SDL.h"
 #undef main
+
+struct SDL_Window;
 
 namespace Engine
 {
