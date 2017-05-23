@@ -15,8 +15,6 @@ namespace Engine
 		InputManager(void);
 		~InputManager(void);
 
-		void Update();
-
 		void PressKey(unsigned int keyID);
 		void ReleaseKey(unsigned int keyID);
 
@@ -28,6 +26,7 @@ namespace Engine
 
 		glm::ivec2 GetMouseCoords() const { return mouseCoords; }
 		glm::ivec2 GetMouseCoordsRel() const { return mouseCoordsRel; }
+
 	private:
 		std::unordered_map<unsigned int, ButtonState> keyMap;
 		glm::ivec2 mouseCoords;
