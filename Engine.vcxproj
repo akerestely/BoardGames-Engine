@@ -137,9 +137,6 @@
     <Link>
       <SubSystem>Windows</SubSystem>
     </Link>
-    <Lib>
-      <AdditionalLibraryDirectories>$(ProjectDir)ExternalDependencies\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Lib>
     <PostBuildEvent>
       <Command>xcopy /Q /D /Y "$(ProjectDir)ExternalDependencies\dll\*.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
@@ -156,9 +153,6 @@
     <Link>
       <SubSystem>Windows</SubSystem>
     </Link>
-    <Lib>
-      <AdditionalLibraryDirectories>$(ProjectDir)ExternalDependencies\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Lib>
     <PostBuildEvent>
       <Command>xcopy /Q /D /Y "$(ProjectDir)ExternalDependencies\dll\*.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
@@ -179,9 +173,6 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
-    <Lib>
-      <AdditionalLibraryDirectories>$(ProjectDir)ExternalDependencies\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Lib>
     <PostBuildEvent>
       <Command>xcopy /Q /D /Y "$(ProjectDir)ExternalDependencies\dll\*.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
@@ -202,9 +193,6 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
-    <Lib>
-      <AdditionalLibraryDirectories>$(ProjectDir)ExternalDependencies\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Lib>
     <PostBuildEvent>
       <Command>xcopy /Q /D /Y "$(ProjectDir)ExternalDependencies\dll\*.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
