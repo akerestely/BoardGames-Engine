@@ -17,7 +17,7 @@ namespace Engine
 	{
 	}
 
-	void Window::Create(char* windowTitle, uint screenWidth, uint screenHeight, uint currentFlags)
+	void Window::Create(const char* windowTitle, uint screenWidth, uint screenHeight, uint currentFlags)
 	{
 		Uint32 flags = SDL_WINDOW_OPENGL;
 		if (currentFlags & INVISIBLE)

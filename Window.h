@@ -12,7 +12,7 @@ namespace Engine
 		Window(void);
 		~Window(void);
 
-		void Create(char* windowTitle, uint screenWidth, uint screenHeight, uint currentFlags);
+		void Create(const char* windowTitle, uint screenWidth, uint screenHeight, uint currentFlags);
 
 		void SwappBuffer();
 
