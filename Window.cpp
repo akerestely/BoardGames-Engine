@@ -1,8 +1,10 @@
+#include "BaseTypes.h"
 #include "Window.h"
 
 #include "Errors.h"
 #include <stdio.h>
 #include "SDl\SDL_video.h"
+#include "GL/glew.h"
 
 namespace Engine
 {

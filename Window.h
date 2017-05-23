@@ -1,7 +1,4 @@
 #pragma once
-#include "BaseTypes.h"
-#include "GL/glew.h"
-#undef main
 
 struct SDL_Window;
 

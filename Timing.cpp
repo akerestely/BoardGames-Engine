@@ -1,3 +1,4 @@
+#include "BaseTypes.h"
 #include "Timing.h"
 
 #include <cstring>

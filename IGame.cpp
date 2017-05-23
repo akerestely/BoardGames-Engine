@@ -1,7 +1,9 @@
 #include "IGame.h"
+
 #include "Engine.h"
 #include "SDl\SDL_events.h"
 #include "SDl\SDL_timer.h"
+#include "gl\glew.h"
 
 namespace Engine
 {

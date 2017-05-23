@@ -1,4 +1,5 @@
 #pragma once
+#include "BaseTypes.h"
 #include "Window.h"
 #include "InputManager.h"
 #include "Timing.h"
