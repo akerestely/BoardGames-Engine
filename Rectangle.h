@@ -26,6 +26,16 @@ namespace Engine
 			return glm::detail::tvec2<Type, glm::precision::defaultp>((xMax + xMin) / 2, (yMax + yMin) / 2);
 		}
 
+		Type Width() const
+		{
+			return xMax - xMin;
+		}
+
+		Type Height() const
+		{
+			return yMax - yMin;
+		}
+
 
 		//check if the given point is inside the rectangle
 		template<class OtherType>
@@ -50,6 +60,30 @@ namespace Engine
 		bool Outside(const Rectangle<OtherType> &otherRect) const
 		{
 			return (xMin >= otherRect.xMax || yMin >= otherRect.yMax || xMax <= otherRect.xMin || yMax <= otherRect.yMin);
+		}
+
+		const Rectangle<Type>& MoveTo(Type x, Type y)
+		{
+			xMax = Width() + x;
+			xMin = x;
+
+			yMax = Height() + y;
+			yMin = y;
+
+			return *this;
+		}
+
+		const Rectangle<Type>& CenterOn(Type x, Type y)
+		{
+			const Type widthPerTwo = Width() / 2;
+			xMax = x + widthPerTwo;
+			xMin = x - widthPerTwo;
+
+			const Type heightPerTwo = Height() / 2;
+			yMax = y + heightPerTwo;
+			yMin = y - heightPerTwo;
+
+			return *this;
 		}
 
 // 		template< class T >
@@ -121,15 +155,6 @@ namespace Engine
 // 			yMax -= otherRect.yMax;
 // 		}
 // 
-// 		template< class T >
-// 		void MoveTo(T x, T y)
-// 		{
-// 			xMax = Width() + x;
-// 			xMin = x;
-// 
-// 			yMax = Height() + y;
-// 			yMin = y;
-// 		}
 // 
 // 		template< class T >
 // 		void Translate(T dx, T dy)
