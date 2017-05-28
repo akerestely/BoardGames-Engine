@@ -15,6 +15,7 @@ namespace Engine
 		case Key::Q:					return SDLK_q;
 		case Key::S:					return SDLK_s;
 		case Key::W:					return SDLK_w;
+		case Key::R:					return SDLK_r;
 		case Key::Space:				return SDLK_SPACE;
 		case Key::Esc:					return SDLK_ESCAPE;
 		case Key::F1:					return SDLK_F1;
@@ -39,6 +40,7 @@ namespace Engine
 		case SDLK_q:			return Key::Q;
 		case SDLK_s:			return Key::S;
 		case SDLK_w:			return Key::W;
+		case SDLK_r:			return Key::R;
 		case SDLK_SPACE:		return Key::Space;
 		case SDLK_ESCAPE:		return Key::Esc;
 		case SDLK_F1:			return Key::F1;

@@ -15,6 +15,7 @@ namespace Engine
 		Q,
 		S,
 		W,
+		R,
 
 		Space,
 		Esc,
@@ -26,7 +27,7 @@ namespace Engine
 
 		LeftMouseButton,
 		MiddleMouseButton,
-		RightMouseButton
+		RightMouseButton,
 	};
 
 	enum class EventType
