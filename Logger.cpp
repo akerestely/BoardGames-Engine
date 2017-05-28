@@ -14,7 +14,7 @@ namespace Engine
 		char szBuff[1024];
 		va_list arg;
 		va_start(arg, szFormat);
-		_vsnprintf(szBuff, sizeof(szBuff), szFormat, arg);
+		_vsnprintf_s(szBuff, sizeof(szBuff), szFormat, arg);
 		va_end(arg);
 		auto size = strlen(szBuff);
 		szBuff[size] = '\n';
