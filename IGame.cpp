@@ -15,14 +15,6 @@ namespace Engine
 		onDestroy();
 	}
 
-	void IGame::handleDefaultInput()
-	{
-		if (m_inputManager.IsKeyDownOnce(Key::Esc))
-			m_gameState = State::Exiting;
-		if (m_inputManager.IsKeyDownOnce(Key::F4))
-			m_window.Fullscreen(!m_window.IsFullscreen());
-	}
-
 	void IGame::setMaxFps()
 	{
 		m_fpsLimiter.SetMaxFps(m_maxFps);
@@ -56,6 +48,15 @@ namespace Engine
 				break;
 			case SDL_KEYDOWN:
 				m_inputManager.PressKey(evnt.key.keysym.sym);
+				switch (evnt.key.keysym.sym)
+				{
+				case SDLK_ESCAPE:
+					m_gameState = State::Exiting;
+					break;
+				case SDLK_F4:
+					m_window.Fullscreen(!m_window.IsFullscreen());
+					break;
+				}
 				break;
 			case SDL_KEYUP:
 				m_inputManager.ReleaseKey(evnt.key.keysym.sym);
@@ -83,7 +84,6 @@ namespace Engine
 			m_fpsLimiter.Begin();
 
 			processInput();
-			handleDefaultInput();
 			onUpdate();
 
 			glClearDepth(1.0);

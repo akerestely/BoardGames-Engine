@@ -1,17 +1,14 @@
 #pragma once
+#include <map>
 #include <unordered_map>
+#include <functional>
 #include <glm\glm.hpp>
+
 namespace Engine
 {
-	struct ButtonState
-	{
-		bool pressed;
-		bool usedOnce;
-		ButtonState() : pressed(false), usedOnce(false) {}
-	};
-
 	enum class Key
 	{
+		None,
 		A,
 		D,
 		E,
@@ -32,17 +29,28 @@ namespace Engine
 		RightMouseButton
 	};
 
+	enum class EventType
+	{
+		ButtonDown,
+		ButtonUp,
+		MouseMotion
+	};
+
 	class InputManager
 	{
 	public:
+		using TCallback = std::function<void(void*)>;
+
+	public:
 		InputManager(void);
 		~InputManager(void);
+
+		void Register(EventType eventType, TCallback callback);
 
 		void PressKey(uint keyID);
 		void ReleaseKey(uint keyID);
 
 		bool IsKeyDown(Key keyID);
-		bool IsKeyDownOnce(Key keyID);
 
 		void SetMouseCoords(int x, int y);
 		void SetMouseCoordsRel(int x, int y);
@@ -51,8 +59,10 @@ namespace Engine
 		glm::ivec2 GetMouseCoordsRel() const { return mouseCoordsRel; }
 
 	private:
-		std::unordered_map<uint, ButtonState> keyMap;
+		std::unordered_map<uint, bool> keyMap;
 		glm::ivec2 mouseCoords;
 		glm::ivec2 mouseCoordsRel;
+
+		std::map<EventType, std::vector<TCallback>> registeredCallbacks;
 	};
 }
