@@ -15,9 +15,10 @@ namespace Engine
 		onDestroy();
 	}
 
-	void IGame::setMaxFps()
+	void IGame::setMaxFps(uint maxFps)
 	{
-		m_fpsLimiter.SetMaxFps(m_maxFps);
+		m_maxFps = maxFps;
+		m_fpsLimiter.SetMaxFps(maxFps);
 	}
 
 	uint IGame::getTime() const

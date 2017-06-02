@@ -18,7 +18,7 @@ namespace Engine
 		virtual void onRender() {};
 		virtual void onDestroy() {};
 
-		void setMaxFps();
+		void setMaxFps(uint maxFps);
 		float getFps() const { return m_fps; }
 		uint getTime() const;
 
