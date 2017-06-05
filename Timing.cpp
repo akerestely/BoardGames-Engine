@@ -30,11 +30,11 @@ namespace Engine
 		startTicks = SDL_GetTicks();
 	}
 
-	float FpsLimiter::End()
-	{
+	float FpsLimiter::End(bool bLimit /*= true*/)
+{
 		uint currentTicks = SDL_GetTicks();
 		uint frameTime = currentTicks - startTicks;
-		if (frameTime < maxFrameTime)
+		if (bLimit && frameTime < maxFrameTime)
 		{
 			uint msToWait = (uint)maxFrameTime - frameTime;
 			SDL_Delay(msToWait);

@@ -54,9 +54,19 @@ namespace Engine
 				case SDLK_ESCAPE:
 					m_gameState = State::Exiting;
 					break;
+				case SDLK_F1:
+					m_bSkipRendering = !m_bSkipRendering;
+					m_bLimitFps = !m_bLimitFps;
+					break;
 				case SDLK_F4:
 					m_window.Fullscreen(!m_window.IsFullscreen());
 					break;
+				case SDLK_F5:
+					m_bSkipRendering = !m_bSkipRendering;
+					break;
+				case SDLK_F6:
+					m_bLimitFps = !m_bLimitFps;
+					break; 
 				}
 				break;
 			case SDL_KEYUP:
@@ -78,6 +88,14 @@ namespace Engine
 		}
 	}
 
+	void IGame::render()
+	{
+		glClearDepth(1.0);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		onRender();
+		m_window.SwappBuffer();
+	}
+
 	void IGame::gameLoop()
 	{
 		while (m_gameState != State::Exiting)
@@ -86,13 +104,10 @@ namespace Engine
 
 			processInput();
 			onUpdate();
+			if (!m_bSkipRendering)
+				render();
 
-			glClearDepth(1.0);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			onRender();
-			m_window.SwappBuffer();
-
-			m_fps = m_fpsLimiter.End();
+			m_fps = m_fpsLimiter.End(m_bLimitFps);
 		}
 	}
 }

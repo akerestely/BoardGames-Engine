@@ -13,7 +13,7 @@ namespace Engine
 		void Begin();
 
 		//will return current fps
-		float End();
+		float End(bool bLimit = true);
 	private:
 		// returns fps
 		float calculateFps();

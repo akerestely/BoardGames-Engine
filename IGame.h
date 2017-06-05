@@ -39,6 +39,7 @@ namespace Engine
 	private:
 		void initSystems();
 		void processInput();
+		void render();
 		void gameLoop();
 
 	private:
@@ -46,8 +47,10 @@ namespace Engine
 		State m_gameState;
 
 		FpsLimiter m_fpsLimiter;
-
 		uint m_maxFps = 60;
 		float m_fps = 0;
+
+		bool m_bLimitFps = true;
+		bool m_bSkipRendering = false;
 	};
 }
