@@ -21,6 +21,8 @@ namespace Engine
 		Esc,
 		F1,
 		F4,
+		F5,
+		F6,
 
 		NumpadPlus,
 		NumpadMinus,

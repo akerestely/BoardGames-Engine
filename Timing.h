@@ -18,13 +18,13 @@ namespace Engine
 		// returns fps
 		float calculateFps();
 
-		static const int kNumSamples = 10;
+		static const uint kNumSamples = 10;
 		uint frameTimes[kNumSamples];
 
 		uint maxFps;
 		float maxFrameTime;
 
 		uint startTicks;
-		int currentFrame;
+		uint currentFrame;
 	};
 }

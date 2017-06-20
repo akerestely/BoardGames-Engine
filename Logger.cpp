@@ -21,6 +21,7 @@ namespace Engine
 		szBuff[size + 1] = '\0';
 
 		OutputDebugStringA(szBuff);
+		printf("%s", szBuff);
 #endif		
 	}
 }
