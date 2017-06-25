@@ -7,23 +7,20 @@
 
 namespace Engine
 {
-	Sprite::Sprite(void)
+	Sprite::Sprite()
 	{
-		vboId = 0;
+		m_vboId = 0;
 	}
 
-	void Sprite::Init(float x, float y, float width, float height, char* texturePath)
+	void Sprite::Init(float x, float y, float width, float height, const char* texturePath)
 	{
-		this->x=x;
-		this->y=y;
-		this->width=width;
-		this->height=height;
+		m_bounds.Set(posf{ x, y }, posf{ x + width, y + height });
 
-		texture=ResourceMngr::GetTexture(texturePath);
+		m_texture = ResourceMngr::GetTexture(texturePath);
 
-		if (!vboId)
+		if (!m_vboId)
 		{
-			glGenBuffers(1,&vboId);
+			glGenBuffers(1, &m_vboId);
 		}
 
 		Vertex vertexData[6];
@@ -46,32 +43,32 @@ namespace Engine
 		vertexData[5].SetPosition(x + width, y + height);
 		vertexData[5].SetUV(1.0f, 1.0f);
 
-		for(int i=0;i<6;i++)
+		for (int i = 0; i < 6; i++)
 		{
-			vertexData[i].SetColor(255,0,255,255);
+			vertexData[i].SetColor(255, 0, 255, 255);
 		}
 
-		vertexData[1].SetColor(0,0,255,255);
-		vertexData[4].SetColor(0,255,0,255);
+		vertexData[1].SetColor(0, 0, 255, 255);
+		vertexData[4].SetColor(0, 255, 0, 255);
 
-		glBindBuffer(GL_ARRAY_BUFFER, vboId);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData),vertexData,GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, m_vboId);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
 	void Sprite::Draw()
 	{
-		glBindTexture(GL_TEXTURE_2D, texture.id);
+		glBindTexture(GL_TEXTURE_2D, m_texture.id);
 
-		glBindBuffer(GL_ARRAY_BUFFER, vboId);
+		glBindBuffer(GL_ARRAY_BUFFER, m_vboId);
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(0, 2, GL_FLOAT ,GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex,position));
-		glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex), (void*)offsetof(Vertex,color));
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex,uv));
+		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
+		glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex), (void*)offsetof(Vertex, color));
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
 
-		glDrawArrays(GL_TRIANGLES,0,6);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
@@ -79,9 +76,9 @@ namespace Engine
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
-	Sprite::~Sprite(void)
+	Sprite::~Sprite()
 	{
-		if(vboId)
-			glDeleteBuffers(1,&vboId);
+		if (m_vboId)
+			glDeleteBuffers(1, &m_vboId);
 	}
 }

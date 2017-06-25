@@ -59,7 +59,7 @@ namespace Engine
 		return Key::None;
 	}
 
-	InputManager::InputManager(void) : mouseCoords(0), mouseCoordsRel(0)
+	InputManager::InputManager(void) : m_mouseCoords(0), m_mouseCoordsRel(0)
 	{
 	}
 
@@ -69,47 +69,47 @@ namespace Engine
 
 	void InputManager::Register(EventType eventType, TCallback callback)
 	{
-		registeredCallbacks[eventType].push_back(callback);
+		m_registeredCallbacks[eventType].push_back(callback);
 	}
 
 	void InputManager::PressKey(uint keyID)
 	{
-		keyMap[keyID] = true;
+		m_keyMap[keyID] = true;
 
 		Key key = SDLKeyToKey(keyID);
-		for (auto &callback : registeredCallbacks[EventType::ButtonDown])
+		for (auto &callback : m_registeredCallbacks[EventType::ButtonDown])
 			callback(&key);
 	}
 
 	void InputManager::ReleaseKey(uint keyID)
 	{
-		keyMap[keyID] = false;
+		m_keyMap[keyID] = false;
 
 		Key key = SDLKeyToKey(keyID);
-		for (auto &callback : registeredCallbacks[EventType::ButtonUp])
+		for (auto &callback : m_registeredCallbacks[EventType::ButtonUp])
 			callback(&key);
 	}
 
 	bool InputManager::IsKeyDown(Key keyID)
 	{
-		auto it = keyMap.find(KeyToSDLKey(keyID));
-		if (it != keyMap.end())
+		auto it = m_keyMap.find(KeyToSDLKey(keyID));
+		if (it != m_keyMap.end())
 			return it->second;
 		return false;
 	}
 
 	void InputManager::SetMouseCoords(int x, int y)
 	{
-		mouseCoords.x = x;
-		mouseCoords.y = y;
+		m_mouseCoords.x = x;
+		m_mouseCoords.y = y;
 
-		for (auto &callback : registeredCallbacks[EventType::MouseMotion])
+		for (auto &callback : m_registeredCallbacks[EventType::MouseMotion])
 			callback(&glm::ivec2(x,y));
 	}
 
 	void InputManager::SetMouseCoordsRel(int x, int y)
 	{
-		mouseCoordsRel.x = x;
-		mouseCoordsRel.y = y;
+		m_mouseCoordsRel.x = x;
+		m_mouseCoordsRel.y = y;
 	}
 }

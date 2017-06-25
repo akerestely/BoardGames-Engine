@@ -7,66 +7,62 @@
 
 #include "glew.h"
 #include "Errors.h"
+#include "Logger.h"
 
 namespace Engine
 {
 	GLSLProgram::GLSLProgram(void) :
-		numAtrtrib(0), programId(0), vertexShaderId(0), fragmentShaderId(0)
-	{
-	}
-
-	GLSLProgram::~GLSLProgram(void)
+		m_numAtrtrib(0), m_programId(0), m_vertexShaderId(0), m_fragmentShaderId(0)
 	{
 	}
 
 	void GLSLProgram::CompileShaders(const char* vertexShaderFilePath, const char* fragmentShaderFilePath)
 	{
-		vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
-		if (!vertexShaderId)
+		m_vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
+		if (!m_vertexShaderId)
 			fatalError("Vertex shader failed to be created!");
 
-		fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
-		if (!fragmentShaderId)
+		m_fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
+		if (!m_fragmentShaderId)
 			fatalError("Fragment shader failed to be created!");
 
-		compileShader(vertexShaderFilePath, vertexShaderId);
-		compileShader(fragmentShaderFilePath, fragmentShaderId);
+		compileShader(vertexShaderFilePath, m_vertexShaderId);
+		compileShader(fragmentShaderFilePath, m_fragmentShaderId);
 
 		//Vertex and fragment shaders are successfully compiled.
 		//Get a program object.
-		programId = glCreateProgram();
+		m_programId = glCreateProgram();
 	}
 
 	void GLSLProgram::LinkShader()
 	{
 		//Attach our shaders to our program
-		glAttachShader(programId, vertexShaderId);
-		glAttachShader(programId, fragmentShaderId);
+		glAttachShader(m_programId, m_vertexShaderId);
+		glAttachShader(m_programId, m_fragmentShaderId);
 
 		//Link our program
-		glLinkProgram(programId);
+		glLinkProgram(m_programId);
 
 		//Note the different functions here: glGetProgram* instead of glGetShader*.
-		GLint isLinked = 0;
-		glGetProgramiv(programId, GL_LINK_STATUS, (int *)&isLinked);
+		int isLinked = 0;
+		glGetProgramiv(m_programId, GL_LINK_STATUS, (int *)&isLinked);
 		if (isLinked == GL_FALSE)
 		{
-			GLint maxLength = 0;
-			glGetProgramiv(programId, GL_INFO_LOG_LENGTH, &maxLength);
+			int maxLength = 0;
+			glGetProgramiv(m_programId, GL_INFO_LOG_LENGTH, &maxLength);
 
 			//The maxLength includes the NULL character
-			std::vector<char> errorLog(maxLength);
-			glGetProgramInfoLog(programId, maxLength, &maxLength, &errorLog[0]);
+			std::string errorLog;
+			errorLog.resize(maxLength);
+			glGetProgramInfoLog(m_programId, maxLength, &maxLength, &errorLog[0]);
 
 			//We don't need the program anymore.
-			glDeleteProgram(programId);
+			glDeleteProgram(m_programId);
 			//Don't leak shaders either.
-			glDeleteShader(vertexShaderId);
-			glDeleteShader(fragmentShaderId);
+			glDeleteShader(m_vertexShaderId);
+			glDeleteShader(m_fragmentShaderId);
 
-			//Use the infoLog as you see fit.
-
-			std::printf("%s\n", &errorLog[0]);
+			log("%s\n", errorLog);
 			fatalError("Shader faild to link");
 
 			//In this simple program, we'll just leave
@@ -74,20 +70,20 @@ namespace Engine
 		}
 
 		//Always detach shaders after a successful link.
-		glDetachShader(programId, vertexShaderId);
-		glDetachShader(programId, fragmentShaderId);
-		glDeleteShader(vertexShaderId);
-		glDeleteShader(fragmentShaderId);
+		glDetachShader(m_programId, m_vertexShaderId);
+		glDetachShader(m_programId, m_fragmentShaderId);
+		glDeleteShader(m_vertexShaderId);
+		glDeleteShader(m_fragmentShaderId);
 	}
 
 	void GLSLProgram::AddAttribute(const char* attribName)
 	{
-		glBindAttribLocation(programId, numAtrtrib++, attribName);
+		glBindAttribLocation(m_programId, m_numAtrtrib++, attribName);
 	}
 
-	GLint GLSLProgram::GetUniformLocation(const char* uniformName)
+	uint GLSLProgram::GetUniformLocation(const char* uniformName)
 	{
-		GLint location = glGetUniformLocation(programId, uniformName);
+		uint location = glGetUniformLocation(m_programId, uniformName);
 		if (location == GL_INVALID_INDEX)
 			fatalError(std::string("Uniform \"") + uniformName + "\" not found in shader");
 		return location;
@@ -95,14 +91,14 @@ namespace Engine
 
 	void GLSLProgram::Use()
 	{
-		glUseProgram(programId);
-		for (int i = 0; i < numAtrtrib; i++)
+		glUseProgram(m_programId);
+		for (uint i = 0; i < m_numAtrtrib; i++)
 			glEnableVertexAttribArray(i);
 	}
 	void GLSLProgram::UnUse()
 	{
 		glUseProgram(0);
-		for (int i = 0; i < numAtrtrib; i++)
+		for (uint i = 0; i < m_numAtrtrib; i++)
 			glDisableVertexAttribArray(i);
 	}
 
@@ -122,28 +118,27 @@ namespace Engine
 		file.close();
 
 		const GLchar* chShaderSource = fileContents.c_str() + '\0';
-		//printf("%s", chShaderSource);
 		glShaderSource(id, 1, (const GLchar**)&chShaderSource, nullptr);
 
 		glCompileShader(id);
 
-		GLint isCompiled = 0;
+		int isCompiled = 0;
 		glGetShaderiv(id, GL_COMPILE_STATUS, &isCompiled);
 
 		if (isCompiled == GL_FALSE)
 		{
-			GLint maxLength = 0;
+			int maxLength = 0;
 			glGetShaderiv(id, GL_INFO_LOG_LENGTH, &maxLength);
 
 			//The maxLength includes the NULL character
-			std::vector<char> errorLog(maxLength);
+			std::string errorLog;
+			errorLog.resize(maxLength);
 			glGetShaderInfoLog(id, maxLength, &maxLength, &errorLog[0]);
 
-			//Provide the infolog in whatever manor you deem best.
-			//Exit with failure.
 			glDeleteShader(id); //Don't leak the shader.
 
-			std::printf("%s\n", &errorLog[0]);
+			log("%s\n",errorLog);
+			//Exit with failure.
 			fatalError("Shader failed to compile!");
 
 			return;

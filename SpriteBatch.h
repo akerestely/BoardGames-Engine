@@ -5,31 +5,18 @@
 
 namespace Engine
 {
-	enum GlyphSortType { NONE, FRONT_TO_BACK, BACK_TO_FRONT, TEXTURE};
-	class Glyph
+	struct Glyph
 	{
-	public:
-		Glyph() {}
-		Glyph(const glm::vec4 &destRect, const glm::vec4 &uvRect, uint texture, float depth, const ColorRGBA8 &color) :
-			texture(texture),
-			depth(depth)
+		enum class SortType
 		{
-			topLeft.color = color;
-			topLeft.SetPosition(destRect.x, destRect.y + destRect.w);
-			topLeft.SetUV(uvRect.x, uvRect.y + uvRect.w);
+			None,
+			FrontToBack,
+			BackToFront,
+			Texture
+		};
 
-			bottomLeft.color = color;
-			bottomLeft.SetPosition(destRect.x, destRect.y);
-			bottomLeft.SetUV(uvRect.x, uvRect.y);
+		Glyph(const glm::vec4 &destRect, const glm::vec4 &uvRect, uint texture, float depth, const ColorRGBA8 &color);
 
-			bottomRight.color = color;
-			bottomRight.SetPosition(destRect.x + destRect.z, destRect.y);
-			bottomRight.SetUV(uvRect.x + uvRect.z, uvRect.y);
-
-			topRight.color = color;
-			topRight.SetPosition(destRect.x + destRect.z, destRect.y + destRect.w);
-			topRight.SetUV(uvRect.x + uvRect.z, uvRect.y + uvRect.w);
-		}
 		uint texture;
 		float depth;
 
@@ -39,35 +26,28 @@ namespace Engine
 		Vertex bottomRight;
 	};
 
-	class RenderBatch
+	struct RenderBatch
 	{
-	public:
-		RenderBatch(uint offset, uint numVertices, uint texture) : 
-			offset(offset),
-			numVertices(numVertices),
-			texture(texture)
-		{
-		};
+		RenderBatch(uint offset, uint numVertices, uint texture);
 
 		uint offset;
 		uint numVertices;
 		uint texture;
-	private:
 	};
+
 	class SpriteBatch
 	{
 	public:
-		SpriteBatch(void);
-		~SpriteBatch(void);
+		SpriteBatch();
 
 		void Init();
 
-		void Begin(GlyphSortType sortType = TEXTURE);
+		void Begin(Glyph::SortType sortType = Glyph::SortType::Texture);
+		void Draw(const glm::vec4 &destRect, const glm::vec4 &uvRect, uint texture, float depth, const ColorRGBA8 &color);
 		void End();
 
-		void Draw(const glm::vec4 &destRect, const glm::vec4 &uvRect, uint texture, float depth, const ColorRGBA8 &color);
-
 		void RenderBatches();
+
 	private:
 		void createRenderBatches();
 		void createVertexArray();
@@ -75,18 +55,15 @@ namespace Engine
 		void unbindBufferAndAttribs();
 		void sortGlyphs();
 
-		static bool compareFrontToBack(Glyph *a, Glyph *b);
-		static bool compareBackToFront(Glyph *a, Glyph *b);
-		static bool compareTexture(Glyph *a, Glyph *b);
+	private:
+		uint m_vbo;
+		uint m_vao;
 
-		uint vbo;
-		uint vao;
+		Glyph::SortType m_sortType;
 
-		GlyphSortType sortType;
-
-		std::vector<Glyph*> glyphPointers; /// for sorting
-		std::vector<Glyph> glyphs; /// actual glyphs
-		std::vector<RenderBatch> renderBatches;
+		std::vector<Glyph*> m_glyphPointers; /// for sorting
+		std::vector<Glyph> m_glyphs; /// actual glyphs
+		std::vector<RenderBatch> m_renderBatches;
 	};
 }
 

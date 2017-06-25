@@ -59,14 +59,14 @@ namespace Engine
 		void SetMouseCoords(int x, int y);
 		void SetMouseCoordsRel(int x, int y);
 
-		glm::ivec2 GetMouseCoords() const { return mouseCoords; }
-		glm::ivec2 GetMouseCoordsRel() const { return mouseCoordsRel; }
+		glm::ivec2 GetMouseCoords() const { return m_mouseCoords; }
+		glm::ivec2 GetMouseCoordsRel() const { return m_mouseCoordsRel; }
 
 	private:
-		std::unordered_map<uint, bool> keyMap;
-		glm::ivec2 mouseCoords;
-		glm::ivec2 mouseCoordsRel;
+		std::unordered_map<uint, bool> m_keyMap;
+		glm::ivec2 m_mouseCoords;
+		glm::ivec2 m_mouseCoordsRel;
 
-		std::map<EventType, std::vector<TCallback>> registeredCallbacks;
+		std::map<EventType, std::vector<TCallback>> m_registeredCallbacks;
 	};
 }

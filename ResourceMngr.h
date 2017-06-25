@@ -6,9 +6,10 @@ namespace Engine
 	class ResourceMngr
 	{
 	public:
-		static GLTexture GetTexture(char* texturePath);
+		static Texture GetTexture(const char* texturePath);
+
 	private:
-		static TextureCache textureCache;
+		static TextureCache m_textureCache;
 	};
 }
 

@@ -1,5 +1,7 @@
 #pragma once
 #include "glm.hpp"
+#include "Position.h"
+#include "Size.h"
 
 namespace Engine
 {
@@ -7,33 +9,39 @@ namespace Engine
 	class Rectangle
 	{
 	public:
-		Rectangle() : xMin(0), yMin(0), xMax(0), yMax(0) { }
+		Rectangle() : m_xMin(0), m_yMin(0), m_xMax(0), m_yMax(0) { }
 		Rectangle(Type xMin, Type yMin, Type xMax, Type yMax)
 			: xMin(xMin), yMin(yMin), xMax(xMax), yMax(yMax) { }
-		// 	Rectangle(const glm::detail::tvec2<Type> &minPoint, const glm::detail::tvec2<Type> &maxPoint) :
-		// 		: xMin(minPoint.x), yMin(minPoint.y), xMax(maxPoint.x), yMax(maxPoint.y) { }
 
-		void Set(Type xCenter, Type yCenter, Type width, Type height)
+		void Set(const Position<Type> &min, const Position<Type> &max)
 		{
-			xMin = xCenter - width / 2;
-			xMax = xCenter + width / 2;
-			yMin = yCenter - height / 2;
-			yMax = yCenter + height / 2;
+			m_xMin = min.x;
+			m_yMin = min.y;
+			m_xMax = max.x;
+			m_yMax = max.y;
+		}
+
+		void Set(const Position<Type> &center, const Size<Type> &size)
+		{
+			m_xMin = center.x - size.width / 2;
+			m_xMax = center.x + size.width / 2;
+			m_yMin = center.y - size.height / 2;
+			m_yMax = center.y + size.height / 2;
 		}
 
 		glm::detail::tvec2<Type, glm::precision::defaultp> Center() const
 		{
-			return glm::detail::tvec2<Type, glm::precision::defaultp>((xMax + xMin) / 2, (yMax + yMin) / 2);
+			return glm::detail::tvec2<Type, glm::precision::defaultp>((m_xMax + m_xMin) / 2, (m_yMax + m_yMin) / 2);
 		}
 
 		Type Width() const
 		{
-			return xMax - xMin;
+			return m_xMax - m_xMin;
 		}
 
 		Type Height() const
 		{
-			return yMax - yMin;
+			return m_yMax - m_yMin;
 		}
 
 
@@ -41,34 +49,34 @@ namespace Engine
 		template<class OtherType>
 		bool Contains(OtherType x, OtherType y) const
 		{
-			return (x >= xMin && x < xMax && y >= yMin && y < yMax);
+			return (x >= m_xMin && x < m_xMax && y >= m_yMin && y < m_yMax);
 		}
 
 		template<class OtherType>
 		bool Contains(const Rectangle<OtherType> &otherRect) const
 		{
-			return (xMax >= otherRect.xMax && xMin <= otherRect.xMin && yMax >= otherRect.yMax && yMin <= otherRect.yMin);
+			return (m_xMax >= otherRect.xMax && m_xMin <= otherRect.xMin && m_yMax >= otherRect.yMax && m_yMin <= otherRect.yMin);
 		}
 
 		template<class OtherType>
 		bool Intersects(const Rectangle<OtherType> &otherRect) const
 		{
-			return (xMax >= otherRect.xMin && otherRect.xMax >= xMin && yMax >= otherRect.yMin && otherRect.yMax >= yMin);
+			return (m_xMax >= otherRect.xMin && otherRect.xMax >= m_xMin && m_yMax >= otherRect.yMin && otherRect.yMax >= m_yMin);
 		}
 
 		template<class OtherType>
 		bool Outside(const Rectangle<OtherType> &otherRect) const
 		{
-			return (xMin >= otherRect.xMax || yMin >= otherRect.yMax || xMax <= otherRect.xMin || yMax <= otherRect.yMin);
+			return (m_xMin >= otherRect.xMax || m_yMin >= otherRect.yMax || m_xMax <= otherRect.xMin || m_yMax <= otherRect.yMin);
 		}
 
 		const Rectangle<Type>& MoveTo(Type x, Type y)
 		{
-			xMax = Width() + x;
-			xMin = x;
+			m_xMax = Width() + x;
+			m_xMin = x;
 
-			yMax = Height() + y;
-			yMin = y;
+			m_yMax = Height() + y;
+			m_yMin = y;
 
 			return *this;
 		}
@@ -76,12 +84,12 @@ namespace Engine
 		const Rectangle<Type>& CenterOn(Type x, Type y)
 		{
 			const Type widthPerTwo = Width() / 2;
-			xMax = x + widthPerTwo;
-			xMin = x - widthPerTwo;
+			m_xMax = x + widthPerTwo;
+			m_xMin = x - widthPerTwo;
 
 			const Type heightPerTwo = Height() / 2;
-			yMax = y + heightPerTwo;
-			yMin = y - heightPerTwo;
+			m_yMax = y + heightPerTwo;
+			m_yMin = y - heightPerTwo;
 
 			return *this;
 		}
@@ -166,7 +174,7 @@ namespace Engine
 // 		}
 
 	private:
-		Type xMin, yMin, xMax, yMax;
+		Type m_xMin, m_yMin, m_xMax, m_yMax;
 	};
 }
 

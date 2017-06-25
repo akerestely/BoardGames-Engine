@@ -1,13 +1,13 @@
 #pragma once
 
-#include "GLTexture.h"
+#include "Texture.h"
 
 namespace Engine
 {
 	class ImageLoader
 	{
 	public:
-		static GLTexture LoadPNG(char* filepPath);
+		static Texture LoadPNG(const char* filepPath);
 	};
 }
 

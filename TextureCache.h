@@ -1,19 +1,17 @@
 #pragma once
 #include <map>
 
-#include "GLTexture.h"
+#include "Texture.h"
 
 namespace Engine
 {
 	class TextureCache
 	{
 	public:
-		TextureCache(void);
-		~TextureCache(void);
+		Texture GetTexture(const char* texturePath);
 
-		GLTexture GetTexture(char* texturePath);
 	private:
-		std::map<char*, GLTexture> textureMap;
+		std::map<const char*, Texture> m_textureMap;
 	};
 }
 

@@ -1,15 +1,19 @@
 #include "BaseTypes.h"
 #include "IOManager.h"
+
 #include <fstream>
+#include "Errors.h"
+#include "Logger.h"
 
 namespace Engine
 {
-	bool IOManager::ReadFileToBuffer(char* filepath, std::vector<byte>& buffer)
+	bool IOManager::ReadFileToBuffer(const char* filepath, std::vector<byte>& buffer)
 	{
 		std::ifstream file(filepath, std::ios::binary);
 		if (file.fail())
 		{
-			perror(filepath);
+			log("Could not open file %s", filepath);
+			fatalError("Could not open file!");
 			return false;
 		}
 

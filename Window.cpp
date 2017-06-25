@@ -8,13 +8,17 @@
 
 namespace Engine
 {
-	Window::Window(void)
+
+	Window::Window()
+		: m_pSdlWindow(nullptr)
 	{
+		// empty
 	}
 
-
-	Window::~Window(void)
+	Window::~Window()
 	{
+		if(m_pSdlWindow)
+			SDL_DestroyWindow(m_pSdlWindow);
 	}
 
 	void Window::Create(const char* windowTitle, uint screenWidth, uint screenHeight, uint currentFlags)
@@ -27,12 +31,14 @@ namespace Engine
 		if (currentFlags & BORDERLESS)
 			flags |= SDL_WINDOW_BORDERLESS;
 
-		sdlWindow = SDL_CreateWindow(windowTitle, SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED, screenWidth, screenHeight, flags);
+		m_pSdlWindow = SDL_CreateWindow(windowTitle, SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED, screenWidth, screenHeight, flags);
+		m_size.width = screenWidth;
+		m_size.height = screenHeight;
 
-		if(sdlWindow==nullptr)
+		if(m_pSdlWindow==nullptr)
 			fatalError("SDL window could not be loaded");
 
-		SDL_GLContext glContex = SDL_GL_CreateContext(sdlWindow);
+		SDL_GLContext glContex = SDL_GL_CreateContext(m_pSdlWindow);
 		if(glContex == nullptr)
 			fatalError("SQL_GL context could not be created");
 
@@ -53,19 +59,19 @@ namespace Engine
 
 	void Window::SwappBuffer()
 	{
-		SDL_GL_SwapWindow(sdlWindow);
+		SDL_GL_SwapWindow(m_pSdlWindow);
 	}
 
 	bool Window::IsFullscreen()
 	{
-		return SDL_GetWindowFlags(sdlWindow) & SDL_WINDOW_FULLSCREEN;
+		return SDL_GetWindowFlags(m_pSdlWindow) & SDL_WINDOW_FULLSCREEN;
 	}
 
 	void Window::Fullscreen(bool visibility)
 	{
 		if (visibility)
-			SDL_SetWindowFullscreen(sdlWindow, SDL_WINDOW_FULLSCREEN);
+			SDL_SetWindowFullscreen(m_pSdlWindow, SDL_WINDOW_FULLSCREEN);
 		else
-			SDL_SetWindowFullscreen(sdlWindow, 0);
+			SDL_SetWindowFullscreen(m_pSdlWindow, 0);
 	}
 }

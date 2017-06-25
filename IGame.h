@@ -3,6 +3,7 @@
 #include "Window.h"
 #include "InputManager.h"
 #include "Timing.h"
+#include "Size.h"
 
 namespace Engine
 {
@@ -23,8 +24,7 @@ namespace Engine
 		uint getTime() const;
 
 	protected:
-		uint m_screenWidth = 800;
-		uint m_screenHeight = 600;
+		sizei m_screenSize = { 800, 600 };
 		std::string m_windowTitle = "Game";
 
 		InputManager m_inputManager;

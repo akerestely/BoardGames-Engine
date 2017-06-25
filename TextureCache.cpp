@@ -7,33 +7,21 @@
 
 namespace Engine
 {
-	TextureCache::TextureCache(void)
-	{
-	}
-
-
-	TextureCache::~TextureCache(void)
-	{
-	}
-
-	GLTexture TextureCache::GetTexture(char* texturePath)
+	Engine::Texture TextureCache::GetTexture(const char* texturePath)
 	{
 		//lookup for texture and see if its there
-		auto mit = textureMap.find(texturePath);
+		auto mit = m_textureMap.find(texturePath);
 
 		//check if its not in the map
-		if(mit == textureMap.end())
+		if(mit == m_textureMap.end())
 		{
 			//load the texture
-			GLTexture newTexture = ImageLoader::LoadPNG(texturePath);
+			Texture newTexture = ImageLoader::LoadPNG(texturePath);
 
 			//insert it into the map
-			textureMap.insert(std::make_pair(texturePath, newTexture));
-
-			std::cout<<"Load Texture!\n";
-			return newTexture;
+			mit = m_textureMap.insert(std::make_pair(texturePath, newTexture)).first;
 		}
-		std::cout<<"Used Cached Texture!\n";
+
 		return mit->second;
 	}
 }

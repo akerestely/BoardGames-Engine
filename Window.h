@@ -1,4 +1,5 @@
 #pragma once
+#include "Size.h"
 
 struct SDL_Window;
 
@@ -9,8 +10,8 @@ namespace Engine
 	class Window
 	{
 	public:
-		Window(void);
-		~Window(void);
+		Window();
+		~Window();
 
 		void Create(const char* windowTitle, uint screenWidth, uint screenHeight, uint currentFlags);
 
@@ -19,12 +20,9 @@ namespace Engine
 		bool IsFullscreen();
 		void Fullscreen(bool visibility);
 
-		uint GetScreenWidth() { return screenWidth; }
-		uint GetScreenHeight() { return screenHeight; }
-
 	private:
-		SDL_Window *sdlWindow;
-		uint screenWidth, screenHeight;
+		SDL_Window *m_pSdlWindow;
+		sizei m_size;
 	};
 }
 

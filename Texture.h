@@ -1,11 +1,11 @@
 #pragma once
+#include "Size.h"
 
 namespace Engine
 {
-	struct GLTexture
+	struct Texture
 	{
 		uint id;
-		int width;
-		int height;
+		sizei size;
 	};
 }

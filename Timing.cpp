@@ -7,43 +7,38 @@
 
 namespace Engine
 {
-	FpsLimiter::FpsLimiter()
-	{
-
-	}
-
 	void FpsLimiter::Init(uint targetFps)
 	{
-		currentFrame = 0;
-		memset(frameTimes, 0, sizeof(frameTimes));
+		m_currentFrame = 0;
+		memset(m_frameTimes, 0, sizeof(m_frameTimes));
 		SetMaxFps(targetFps);
 	}
 
 	void FpsLimiter::SetMaxFps(uint targetFps)
 	{
-		maxFps = targetFps;
-		maxFrameTime = 1000.f / maxFps;
+		m_maxFps = targetFps;
+		m_maxFrameTime = 1000.f / m_maxFps;
 	}
 
 	void FpsLimiter::Begin()
 	{
-		startTicks = SDL_GetTicks();
+		m_startTicks = SDL_GetTicks();
 	}
 
 	float FpsLimiter::End(bool bLimit /*= true*/)
 {
 		uint currentTicks = SDL_GetTicks();
-		uint frameTime = currentTicks - startTicks;
-		if (bLimit && frameTime < maxFrameTime)
+		uint frameTime = currentTicks - m_startTicks;
+		if (bLimit && frameTime < m_maxFrameTime)
 		{
-			uint msToWait = (uint)maxFrameTime - frameTime;
+			uint msToWait = (uint)m_maxFrameTime - frameTime;
 			SDL_Delay(msToWait);
 			// calculate new frame time, as we slept some time (this should be ~maxFrameTime)
 			currentTicks = SDL_GetTicks();
-			frameTime = currentTicks - startTicks;
+			frameTime = currentTicks - m_startTicks;
 		}
 
-		frameTimes[currentFrame++ % kNumSamples] = frameTime;
+		m_frameTimes[m_currentFrame++ % kNumSamples] = frameTime;
 
 		return calculateFps();
 	}
@@ -51,9 +46,9 @@ namespace Engine
 	float FpsLimiter::calculateFps()
 	{
 		float frameTimeAverage = 0;
-		for (int frameTime : frameTimes)
+		for (int frameTime : m_frameTimes)
 			frameTimeAverage += (float)frameTime;
-		frameTimeAverage /= std::min(currentFrame, kNumSamples);
+		frameTimeAverage /= std::min(m_currentFrame, kNumSamples);
 
 		return 1000.0f / frameTimeAverage;
 	}

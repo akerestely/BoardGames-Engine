@@ -29,7 +29,7 @@ namespace Engine
 	void IGame::initSystems()
 	{
 		Engine::Init();
-		m_window.Create(m_windowTitle.c_str(), m_screenWidth, m_screenHeight, 0);
+		m_window.Create(m_windowTitle.c_str(), m_screenSize.width, m_screenSize.height, 0);
 		m_fpsLimiter.Init(m_maxFps);
 
 		onInit();

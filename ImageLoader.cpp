@@ -8,15 +8,15 @@
 
 namespace Engine
 {
-	GLTexture ImageLoader::LoadPNG(char* filePath)
+	Engine::Texture ImageLoader::LoadPNG(const char* filepPath)
 	{
-		GLTexture texture = {};
+		Texture texture = {};
 
 		std::vector<byte> in;
 		std::vector<byte> out;
 		unsigned long width, height;
 
-		if(!IOManager::ReadFileToBuffer(filePath, in))
+		if(!IOManager::ReadFileToBuffer(filepPath, in))
 			fatalError("Failed to load PNG file to buffer!");
 
 		int errorCode = decodePNG(out, width, height, &(in[0]), in.size());
@@ -40,8 +40,8 @@ namespace Engine
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 
-		texture.width=width;
-		texture.height=height;
+		texture.size.width=width;
+		texture.size.height=height;
 
 		return texture;
 	}

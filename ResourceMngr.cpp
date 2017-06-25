@@ -3,10 +3,10 @@
 
 namespace Engine
 {
-	TextureCache ResourceMngr::textureCache;
+	TextureCache ResourceMngr::m_textureCache;
 
-	GLTexture ResourceMngr::GetTexture(char* texturePath)
+	Engine::Texture ResourceMngr::GetTexture(const char* texturePath)
 	{
-		return textureCache.GetTexture(texturePath);
+		return m_textureCache.GetTexture(texturePath);
 	}
 }

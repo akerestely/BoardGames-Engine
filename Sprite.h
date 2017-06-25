@@ -1,22 +1,24 @@
 #pragma once
 
-#include "GLTexture.h"
+#include "Texture.h"
 #include "ResourceMngr.h"
+#include "Rectangle.h"
 
 namespace Engine
 {
 	class Sprite
 	{
 	public:
-		Sprite(void);
-		void Init(float x, float y, float width, float height, char* texturePath);
-		void Draw();
-		~Sprite(void);
-	private:
-		uint vboId;
-		float x, y, width, height;
+		Sprite();
+		~Sprite();
 
-		GLTexture texture;
+		void Init(float x, float y, float width, float height, const char* texturePath);
+		void Draw();
+
+	private:
+		uint m_vboId;
+		rectf m_bounds;
+		Texture m_texture;
 	};
 }
 

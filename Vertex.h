@@ -1,14 +1,9 @@
 #pragma once
 #include "BaseTypes.h"
+#include "Position.h"
 
 namespace Engine
 {
-	struct Position
-	{
-		float x;
-		float y;
-	};
-
 	struct ColorRGBA8
 	{
 		byte r;
@@ -28,7 +23,7 @@ namespace Engine
 
 	struct Vertex
 	{
-		Position position;
+		posf position;
 		ColorRGBA8 color;
 		UV uv;
 

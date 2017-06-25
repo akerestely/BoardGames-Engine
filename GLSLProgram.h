@@ -5,27 +5,25 @@ namespace Engine
 	class GLSLProgram
 	{
 	public:
-		GLSLProgram(void);
-		~GLSLProgram(void);
+		GLSLProgram();
 
 		void CompileShaders(const char* vertexShaderFilePath, const char* fragmentShaderFilePath);
-
 		void LinkShader();
 
 		void AddAttribute(const char* attribName);
 
-		int GLSLProgram::GetUniformLocation( const char* uniformName);
+		uint GLSLProgram::GetUniformLocation(const char* uniformName);
 
 		void Use();
 		void UnUse();
 	private:
 		void compileShader(const char* filePath, uint id);
 
-		int numAtrtrib;
-		uint programId;
+		uint m_numAtrtrib;
+		uint m_programId;
 
-		uint vertexShaderId;
-		uint fragmentShaderId;
+		uint m_vertexShaderId;
+		uint m_fragmentShaderId;
 	};
 }
 
