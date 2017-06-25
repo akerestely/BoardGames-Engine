@@ -1,7 +1,5 @@
 #pragma once
 
-#include <GL/glew.h>
-
 namespace Engine
 {
 	class GLSLProgram
@@ -16,18 +14,18 @@ namespace Engine
 
 		void AddAttribute(const char* attribName);
 
-		GLint GetUniformLocation( const char* uniformName);
+		int GLSLProgram::GetUniformLocation( const char* uniformName);
 
 		void Use();
 		void UnUse();
 	private:
-		void compileShader(const char* filePath, GLuint id);
+		void compileShader(const char* filePath, uint id);
 
 		int numAtrtrib;
-		GLuint programId;
+		uint programId;
 
-		GLuint vertexShaderId;
-		GLuint fragmentShaderId;
+		uint vertexShaderId;
+		uint fragmentShaderId;
 	};
 }
 

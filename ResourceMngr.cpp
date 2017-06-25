@@ -1,3 +1,4 @@
+#include "BaseTypes.h"
 #include "ResourceMngr.h"
 
 namespace Engine

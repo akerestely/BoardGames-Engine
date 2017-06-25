@@ -1,9 +1,11 @@
+#include "BaseTypes.h"
 #include "GLSLProgram.h"
 
 #include <fstream>
 #include <string>
 #include <vector>
 
+#include "glew.h"
 #include "Errors.h"
 
 namespace Engine
@@ -104,7 +106,7 @@ namespace Engine
 			glDisableVertexAttribArray(i);
 	}
 
-	void GLSLProgram::compileShader(const char* filePath, GLuint id)
+	void GLSLProgram::compileShader(const char* filePath, uint id)
 	{
 		std::ifstream file(filePath);
 		if (file.fail())

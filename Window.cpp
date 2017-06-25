@@ -3,8 +3,8 @@
 
 #include "Errors.h"
 #include <stdio.h>
-#include "SDl\SDL_video.h"
-#include "GL/glew.h"
+#include "SDL_video.h"
+#include "glew.h"
 
 namespace Engine
 {

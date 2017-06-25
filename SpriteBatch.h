@@ -1,7 +1,6 @@
 #pragma once
-#include <GL\glew.h>
 #include "Vertex.h"
-#include <glm\gtc\matrix_transform.hpp>
+#include <gtc\matrix_transform.hpp>
 #include <vector>
 
 namespace Engine
@@ -11,7 +10,9 @@ namespace Engine
 	{
 	public:
 		Glyph() {}
-		Glyph(const glm::vec4 &destRect, const glm::vec4 &uvRect, GLuint texture, float depth, const ColorRGBA8 &color):texture(texture), depth(depth)
+		Glyph(const glm::vec4 &destRect, const glm::vec4 &uvRect, uint texture, float depth, const ColorRGBA8 &color) :
+			texture(texture),
+			depth(depth)
 		{
 			topLeft.color = color;
 			topLeft.SetPosition(destRect.x, destRect.y + destRect.w);
@@ -29,7 +30,7 @@ namespace Engine
 			topRight.SetPosition(destRect.x + destRect.z, destRect.y + destRect.w);
 			topRight.SetUV(uvRect.x + uvRect.z, uvRect.y + uvRect.w);
 		}
-		GLuint texture;
+		uint texture;
 		float depth;
 
 		Vertex topLeft;
@@ -41,10 +42,16 @@ namespace Engine
 	class RenderBatch
 	{
 	public:
-		RenderBatch(GLuint offset, GLuint numVertices, GLuint texture): offset(offset),numVertices(numVertices),texture(texture){};
-		GLuint offset;
-		GLuint numVertices;
-		GLuint texture;
+		RenderBatch(uint offset, uint numVertices, uint texture) : 
+			offset(offset),
+			numVertices(numVertices),
+			texture(texture)
+		{
+		};
+
+		uint offset;
+		uint numVertices;
+		uint texture;
 	private:
 	};
 	class SpriteBatch
@@ -58,7 +65,7 @@ namespace Engine
 		void Begin(GlyphSortType sortType = TEXTURE);
 		void End();
 
-		void Draw(const glm::vec4 &destRect, const glm::vec4 &uvRect, GLuint texture, float depth, const ColorRGBA8 &color);
+		void Draw(const glm::vec4 &destRect, const glm::vec4 &uvRect, uint texture, float depth, const ColorRGBA8 &color);
 
 		void RenderBatches();
 	private:
@@ -72,8 +79,8 @@ namespace Engine
 		static bool compareBackToFront(Glyph *a, Glyph *b);
 		static bool compareTexture(Glyph *a, Glyph *b);
 
-		GLuint vbo;
-		GLuint vao;
+		uint vbo;
+		uint vao;
 
 		GlyphSortType sortType;
 

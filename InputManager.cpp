@@ -1,7 +1,7 @@
 #include "BaseTypes.h"
 #include "InputManager.h"
-#include "SDl\SDL_keycode.h"
-#include "SDl\SDL_mouse.h"
+#include "SDL_keycode.h"
+#include "SDL_mouse.h"
 
 namespace Engine
 {

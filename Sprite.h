@@ -1,5 +1,4 @@
 #pragma once
-#include <gl\glew.h>
 
 #include "GLTexture.h"
 #include "ResourceMngr.h"
@@ -14,8 +13,8 @@ namespace Engine
 		void Draw();
 		~Sprite(void);
 	private:
-		GLuint vboId;
-		float x,y,width,height;
+		uint vboId;
+		float x, y, width, height;
 
 		GLTexture texture;
 	};

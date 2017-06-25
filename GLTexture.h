@@ -1,12 +1,10 @@
 #pragma once
 
-#include <GL/glew.h>
-
 namespace Engine
 {
 	struct GLTexture
 	{
-		GLuint id;
+		uint id;
 		int width;
 		int height;
 	};

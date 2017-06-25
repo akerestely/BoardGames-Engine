@@ -1,6 +1,7 @@
+#include "BaseTypes.h"
 #include "Sprite.h"
 
-#include <cstddef>
+#include "glew.h"
 
 #include "Vertex.h"
 
@@ -8,7 +9,7 @@ namespace Engine
 {
 	Sprite::Sprite(void)
 	{
-		vboId=0;
+		vboId = 0;
 	}
 
 	void Sprite::Init(float x, float y, float width, float height, char* texturePath)

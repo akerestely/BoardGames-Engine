@@ -1,3 +1,4 @@
+#include "BaseTypes.h"
 #include "TextureCache.h"
 
 #include <iostream>

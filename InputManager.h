@@ -2,7 +2,8 @@
 #include <map>
 #include <unordered_map>
 #include <functional>
-#include <glm\glm.hpp>
+
+#include "glm.hpp"
 
 namespace Engine
 {

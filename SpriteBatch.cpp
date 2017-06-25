@@ -1,6 +1,9 @@
 #include "BaseTypes.h"
 #include "SpriteBatch.h"
+
 #include <algorithm>
+
+#include "glew.h"
 
 namespace Engine
 {
@@ -37,7 +40,7 @@ namespace Engine
 		createRenderBatches();
 	}
 
-	void SpriteBatch::Draw(const glm::vec4 &destRect, const glm::vec4 &uvRect, GLuint texture, float depth, const ColorRGBA8 &color)
+	void SpriteBatch::Draw(const glm::vec4 &destRect, const glm::vec4 &uvRect, uint texture, float depth, const ColorRGBA8 &color)
 	{
 		Glyph newGlyph(destRect, uvRect, texture, depth, color);
 

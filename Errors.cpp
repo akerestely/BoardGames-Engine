@@ -1,5 +1,5 @@
 #include "Errors.h"
-#include <sdl/SDL.h>
+#include <SDL.h>
 #include "Logger.h"
 
 namespace Engine

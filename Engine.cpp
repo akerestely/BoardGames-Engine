@@ -1,6 +1,6 @@
 #include "Engine.h"
 
-#include <sdl/SDL.h>
+#include "SDL.h"
 #undef main
 
 namespace Engine

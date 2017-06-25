@@ -1,8 +1,9 @@
 #include "Camera2D.h"
 
+#include <gtc/matrix_transform.hpp>
+
 namespace Engine
 {
-
 	Camera2D::Camera2D(void):
 		position(0.0f, 0.0f),
 		cameraMatrix(1.0f),

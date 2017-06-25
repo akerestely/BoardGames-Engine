@@ -2,7 +2,7 @@
 #include "Timing.h"
 
 #include <cstring>
-#include "SDl/SDL.h"
+#include "SDL.h"
 #include <algorithm>
 
 namespace Engine
