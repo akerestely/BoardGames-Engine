@@ -21,10 +21,12 @@ Modified By: Benjamin Arnold
 */
 
 #include <glm.hpp>
-#include <map>
 #include <vector>
 
 #include "Vertex.h"
+
+#define FIRST_PRINTABLE_CHAR ((char)32)
+#define LAST_PRINTABLE_CHAR ((char)126)
 
 namespace Engine 
 {
@@ -33,50 +35,46 @@ namespace Engine
 
 	struct CharGlyph
 	{
-	public:
 		char character;
 		glm::vec4 uvRect;
 		glm::vec2 size;
 	};
 
-#define FIRST_PRINTABLE_CHAR ((char)32)
-#define LAST_PRINTABLE_CHAR ((char)126)
-
 	/// For text justification
 	enum class Justification
 	{
-		LEFT, MIDDLE, RIGHT
+		Left,
+		Middle,
+		Right
 	};
 
 	class SpriteFont
 	{
 	public:
-		SpriteFont() = default;
-		SpriteFont(const char* font, int size, char cs, char ce);
+		SpriteFont(const char* font, int size, char cs = FIRST_PRINTABLE_CHAR, char ce = LAST_PRINTABLE_CHAR);
 
-		void init(const char* font, int size);
-		void init(const char* font, int size, char cs, char ce);
+		void Init(const char* font, int size, char cs = FIRST_PRINTABLE_CHAR, char ce = LAST_PRINTABLE_CHAR);
 
 		/// Destroys the font resources
-		void dispose();
+		void Dispose();
 
-		int getFontHeight() const {
-			return _fontHeight;
-		}
+		int GetFontHeight() const;
 
 		/// Measures the dimensions of the text
-		glm::vec2 measure(const char* s);
+		glm::vec2 Measure(const char* s);
 
 		/// Draws using a sprite batch
-		void draw(SpriteBatch& batch, const char* s, glm::vec2 position, glm::vec2 scaling,
-			float depth, ColorRGBA8 tint, Justification just = Justification::LEFT);
+		void Draw(SpriteBatch& batch, const char* s, glm::vec2 position, glm::vec2 scaling,
+			float depth, ColorRGBA8 tint, Justification just = Justification::Left);
+
 	private:
-		static std::vector<int>* createRows(glm::ivec4* rects, int rectsLength, int r, int padding, int& w);
+		static std::vector<std::vector<int>> createRows(const std::vector<glm::ivec4> &rects, int rectsLength, int r, int padding, int& w);
 
-		int _regStart, _regLength;
-		CharGlyph* _glyphs;
-		int _fontHeight;
+	private:
+		int m_regStart, m_regLength;
+		std::vector<CharGlyph> m_glyphs;
+		int m_fontHeight;
 
-		unsigned int _texID;
+		unsigned int m_texID;
 	};
 }

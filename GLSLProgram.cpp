@@ -89,6 +89,23 @@ namespace Engine
 		return location;
 	}
 
+	void GLSLProgram::UploadUniform(const char* uniformName, int val)
+	{
+		GLint location = glGetUniformLocation(m_programId, uniformName);
+
+		if (location == GL_INVALID_INDEX)
+			fatalError(std::string("Uniform \"") + uniformName + "\" not found in shader");
+		glUniform1i(location, val);
+	}
+
+	void GLSLProgram::UploadUniform(const char* uniformName, const glm::mat4 &projectionMatrix)
+	{
+		uint location = glGetUniformLocation(m_programId, uniformName);
+		if (location == GL_INVALID_INDEX)
+			fatalError(std::string("Uniform \"") + uniformName + "\" not found in shader");
+		glUniformMatrix4fv(location, 1, GL_FALSE, &projectionMatrix[0][0]);
+	}
+
 	void GLSLProgram::Use()
 	{
 		glUseProgram(m_programId);

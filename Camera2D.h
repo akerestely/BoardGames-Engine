@@ -14,19 +14,20 @@ namespace Engine
 		glm::vec2 ConvertScreenToWorld(glm::vec2 screenCoords);
 
 		//setters
-		void SetPosition(const glm::vec2 &newPosition){ m_position = newPosition; m_needsUpdate=true; }
-		void SetScale(float newScale) { m_scale = newScale; m_needsUpdate=true; }
+		void SetPosition(const glm::vec2 &newPosition);
+		void SetScale(float newScale);
+		void SetScale(const glm::vec2 &newScale);
 
 		//getters
-		glm::vec2 GetPosition() { return m_position; }
-		float GetScale() { return m_scale; }
-		const glm::mat4& GetCameraMatrix() const { return m_cameraMatrix; }
+		const glm::vec2& GetPosition();
+		const glm::vec2& GetScale();
+		const glm::mat4& GetCameraMatrix() const;
 
 	private:
 		int m_screenWidth;
 		int m_screenHeight;
 		bool m_needsUpdate;
-		float m_scale;
+		glm::vec2 m_scale;
 		glm::vec2 m_position;
 		glm::mat4 m_cameraMatrix;
 		glm::mat4 m_orthoMatrix;

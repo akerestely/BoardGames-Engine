@@ -1,4 +1,5 @@
 #pragma once
+#include "glm.hpp"
 
 namespace Engine
 {
@@ -12,7 +13,9 @@ namespace Engine
 
 		void AddAttribute(const char* attribName);
 
-		uint GLSLProgram::GetUniformLocation(const char* uniformName);
+		uint GetUniformLocation(const char* uniformName);
+		void UploadUniform(const char* uniformName, int val);
+		void UploadUniform(const char* uniformName, const glm::mat4 &projectionMatrix);
 
 		void Use();
 		void UnUse();

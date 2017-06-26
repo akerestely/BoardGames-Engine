@@ -1,12 +1,12 @@
 #include "SpriteFont.h"
 
-#include "SpriteBatch.h"
-
 #include "SDL.h"
 #include "SDL_ttf.h"
 #include "glew.h"
 
-#include <iostream>
+#include "SpriteBatch.h"
+#include "Errors.h"
+#include "Logger.h"
 
 #define MAX_TEXTURE_RES 4096
 
@@ -24,17 +24,12 @@ int closestPow2(int i)
 
 namespace Engine
 {
-	SpriteFont::SpriteFont(const char* font, int size, char cs, char ce)
+	SpriteFont::SpriteFont(const char* font, int size, char cs /*= FIRST_PRINTABLE_CHAR*/, char ce /*= LAST_PRINTABLE_CHAR*/)
 	{
-		init(font, size, cs, ce);
+		Init(font, size, cs, ce);
 	}
 
-	void SpriteFont::init(const char* font, int size)
-	{
-		init(font, size, FIRST_PRINTABLE_CHAR, LAST_PRINTABLE_CHAR);
-	}
-
-	void SpriteFont::init(const char* font, int size, char cs, char ce)
+	void SpriteFont::Init(const char* font, int size, char cs /*= FIRST_PRINTABLE_CHAR*/, char ce /*= LAST_PRINTABLE_CHAR*/)
 	{
 		// Initialize SDL_ttf
 		if (!TTF_WasInit())
@@ -44,18 +39,16 @@ namespace Engine
 		TTF_Font* f = TTF_OpenFont(font, size);
 		if (f == nullptr)
 		{
-			fprintf(stderr, "Failed to open TTF font %s\n", font);
-			fflush(stderr);
-			throw 281;
+			log("Failed to open TTF font %s\n", font);
+			fatalError("Failed to open TTF font");
 		}
-		_fontHeight = TTF_FontHeight(f);
-		_regStart = cs;
-		_regLength = ce - cs + 1;
+		m_fontHeight = TTF_FontHeight(f);
+		m_regStart = cs;
+		m_regLength = ce - cs + 1;
 		int padding = size / 8;
 
-		std::cout << _regStart << " " << _regLength << std::endl;
-		// First neasure all the regions
-		glm::ivec4* glyphRects = new glm::ivec4[_regLength];
+		// First measure all the regions
+		std::vector<glm::ivec4> glyphRects(m_regLength);
 		int i = 0, advance;
 		for (char c = cs; c <= ce; c++)
 		{
@@ -69,11 +62,11 @@ namespace Engine
 
 		// Find best partitioning of glyphs
 		int rows = 1, w, h, bestWidth = 0, bestHeight = 0, area = MAX_TEXTURE_RES * MAX_TEXTURE_RES, bestRows = 0;
-		std::vector<int>* bestPartition = nullptr;
-		while (rows <= _regLength)
+		std::vector<std::vector<int>> bestPartition;
+		while (rows <= m_regLength)
 		{
-			h = rows * (padding + _fontHeight) + padding;
-			auto gr = createRows(glyphRects, _regLength, rows, padding, w);
+			h = rows * (padding + m_fontHeight) + padding;
+			auto tempPartition = createRows(glyphRects, m_regLength, rows, padding, w);
 
 			// Desire a power of 2 texture
 			w = closestPow2(w);
@@ -83,15 +76,13 @@ namespace Engine
 			if (w > MAX_TEXTURE_RES || h > MAX_TEXTURE_RES)
 			{
 				rows++;
-				delete[] gr;
 				continue;
 			}
 
 			// Check for minimal area
 			if (area >= w * h)
 			{
-				if (bestPartition) delete[] bestPartition;
-				bestPartition = gr;
+				bestPartition.swap(tempPartition);
 				bestWidth = w;
 				bestHeight = h;
 				bestRows = rows;
@@ -100,21 +91,20 @@ namespace Engine
 			}
 			else
 			{
-				delete[] gr;
 				break;
 			}
 		}
 
 		// Can a bitmap font be made?
-		if (!bestPartition)
+		if (bestPartition.empty())
 		{
-			fprintf(stderr, "Failed to Map TTF font %s to texture. Try lowering resolution.\n", font);
-			fflush(stderr);
-			throw 282;
+			log("Failed to Map TTF font %s to texture. Try lowering resolution.\n", font);
+			fatalError("Failed to Map TTF font");
 		}
+
 		// Create the texture
-		glGenTextures(1, &_texID);
-		glBindTexture(GL_TEXTURE_2D, _texID);
+		glGenTextures(1, &m_texID);
+		glBindTexture(GL_TEXTURE_2D, m_texID);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bestWidth, bestHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
 		// Now draw all the glyphs
@@ -152,16 +142,13 @@ namespace Engine
 
 				lx += glyphRects[gi].z + padding;
 			}
-			ly += _fontHeight + padding;
+			ly += m_fontHeight + padding;
 		}
 
 		// Draw the unsupported glyph
 		int rs = padding - 1;
-		int* pureWhiteSquare = new int[rs * rs];
-		memset(pureWhiteSquare, 0xffffffff, rs * rs * sizeof(int));
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, rs, rs, GL_RGBA, GL_UNSIGNED_BYTE, pureWhiteSquare);
-		delete[] pureWhiteSquare;
-		pureWhiteSquare = nullptr;
+		std::vector<int> pureWhiteSquare(rs * rs, 0xffffffff);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, rs, rs, GL_RGBA, GL_UNSIGNED_BYTE, &pureWhiteSquare[0]);
 
 		// Set some texture parameters
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -170,52 +157,47 @@ namespace Engine
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
 		// Create spriteBatch glyphs
-		_glyphs = new CharGlyph[_regLength + 1];
-		for (i = 0; i < _regLength; i++)
+		m_glyphs.resize(m_regLength + 1);
+		for (i = 0; i < m_regLength; i++)
 		{
-			_glyphs[i].character = (char)(cs + i);
-			std::cout << _glyphs[i].character << std::endl;
-			_glyphs[i].size = glm::vec2(glyphRects[i].z, glyphRects[i].w);
-			_glyphs[i].uvRect = glm::vec4(
+			m_glyphs[i].character = (char)(cs + i);
+			m_glyphs[i].size = glm::vec2(glyphRects[i].z, glyphRects[i].w);
+			m_glyphs[i].uvRect = glm::vec4(
 				(float)glyphRects[i].x / (float)bestWidth,
 				(float)glyphRects[i].y / (float)bestHeight,
 				(float)glyphRects[i].z / (float)bestWidth,
 				(float)glyphRects[i].w / (float)bestHeight
 			);
 		}
-		_glyphs[_regLength].character = ' ';
-		_glyphs[_regLength].size = _glyphs[0].size;
-		_glyphs[_regLength].uvRect = glm::vec4(0, 0, (float)rs / (float)bestWidth, (float)rs / (float)bestHeight);
+		m_glyphs[m_regLength].character = ' ';
+		m_glyphs[m_regLength].size = m_glyphs[0].size;
+		m_glyphs[m_regLength].uvRect = glm::vec4(0, 0, (float)rs / (float)bestWidth, (float)rs / (float)bestHeight);
 
 		glBindTexture(GL_TEXTURE_2D, 0);
-		delete[] glyphRects;
-		delete[] bestPartition;
 		TTF_CloseFont(f);
 	}
 
-	void SpriteFont::dispose()
+	void SpriteFont::Dispose()
 	{
-		if (_texID != 0)
+		if (m_texID != 0)
 		{
-			glDeleteTextures(1, &_texID);
-			_texID = 0;
+			glDeleteTextures(1, &m_texID);
+			m_texID = 0;
 		}
-		if (_glyphs)
-		{
-			delete[] _glyphs;
-			_glyphs = nullptr;
-		}
+
+		m_glyphs.clear();
 	}
 
-	std::vector<int>* SpriteFont::createRows(glm::ivec4* rects, int rectsLength, int r, int padding, int& w)
+	int SpriteFont::GetFontHeight() const
+	{
+		return m_fontHeight;
+	}
+
+	std::vector<std::vector<int>> SpriteFont::createRows(const std::vector<glm::ivec4> &rects, int rectsLength, int r, int padding, int& w)
 	{
 		// Blank initialize
-		std::vector<int>* l = new std::vector<int>[r]();
-		int* cw = new int[r]();
-		for (int i = 0; i < r; i++)
-		{
-			cw[i] = padding;
-		}
+		std::vector<std::vector<int>> l(r);
+		std::vector<int> cw(r, padding);
 
 		// Loop through all glyphs
 		for (int i = 0; i < rectsLength; i++)
@@ -223,7 +205,8 @@ namespace Engine
 			// Find row for placement
 			int ri = 0;
 			for (int rii = 1; rii < r; rii++)
-				if (cw[rii] < cw[ri]) ri = rii;
+				if (cw[rii] < cw[ri]) 
+					ri = rii;
 
 			// Add width to that row
 			cw[ri] += rects[i].z + padding;
@@ -242,16 +225,16 @@ namespace Engine
 		return l;
 	}
 
-	glm::vec2 SpriteFont::measure(const char* s)
+	glm::vec2 SpriteFont::Measure(const char* s)
 	{
-		glm::vec2 size(0, _fontHeight);
+		glm::vec2 size(0, m_fontHeight);
 		float cw = 0;
 		for (int si = 0; s[si] != 0; si++)
 		{
 			char c = s[si];
 			if (s[si] == '\n')
 			{
-				size.y += _fontHeight;
+				size.y += m_fontHeight;
 				if (size.x < cw)
 					size.x = cw;
 				cw = 0;
@@ -259,10 +242,10 @@ namespace Engine
 			else
 			{
 				// Check for correct glyph
-				int gi = c - _regStart;
-				if (gi < 0 || gi >= _regLength)
-					gi = _regLength;
-				cw += _glyphs[gi].size.x;
+				int gi = c - m_regStart;
+				if (gi < 0 || gi >= m_regLength)
+					gi = m_regLength;
+				cw += m_glyphs[gi].size.x;
 			}
 		}
 		if (size.x < cw)
@@ -270,36 +253,35 @@ namespace Engine
 		return size;
 	}
 
-	void SpriteFont::draw(SpriteBatch& batch, const char* s, glm::vec2 position, glm::vec2 scaling,
-		float depth, ColorRGBA8 tint, Justification just /* = Justification::LEFT */)
+	void SpriteFont::Draw(SpriteBatch& batch, const char* s, glm::vec2 position, glm::vec2 scaling,
+		float depth, ColorRGBA8 tint, Justification just /*= Justification::LEFT*/)
 	{
 		glm::vec2 tp = position;
 		// Apply justification
-		if (just == Justification::MIDDLE)
+		if (just == Justification::Middle)
 		{
-			tp.x -= measure(s).x * scaling.x / 2;
+			tp.x -= Measure(s).x * scaling.x / 2;
 		}
-		else if (just == Justification::RIGHT)
+		else if (just == Justification::Right)
 		{
-			tp.x -= measure(s).x * scaling.x;
+			tp.x -= Measure(s).x * scaling.x;
 		}
 		for (int si = 0; s[si] != 0; si++)
 		{
 			char c = s[si];
 			if (s[si] == '\n')
 			{
-				tp.y += _fontHeight * scaling.y;
+				tp.y += m_fontHeight * scaling.y;
 				tp.x = position.x;
 			}
 			else
 			{
 				// Check for correct glyph
-				int gi = c - _regStart;
-				if (gi < 0 || gi >= _regLength) gi = _regLength;
-				glm::vec4 destRect(tp, _glyphs[gi].size * scaling);
-				//if (c == '\u00E4') std::cout << _glyphs[gi].uvRect.x << " " << _glyphs[gi].uvRect.y << " " << _glyphs[gi].uvRect.z << " " << _glyphs[gi].uvRect.w << std::endl;
-				batch.Draw(destRect, _glyphs[gi].uvRect, _texID, depth, tint);
-				tp.x += _glyphs[gi].size.x * scaling.x;
+				int gi = c - m_regStart;
+				if (gi < 0 || gi >= m_regLength) gi = m_regLength;
+				glm::vec4 destRect(tp, m_glyphs[gi].size * scaling);
+				batch.Draw(destRect, m_glyphs[gi].uvRect, m_texID, depth, tint);
+				tp.x += m_glyphs[gi].size.x * scaling.x;
 			}
 		}
 	}
