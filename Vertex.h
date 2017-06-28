@@ -10,7 +10,7 @@ namespace Engine
 		byte g;
 		byte b;
 		byte a;
-		ColorRGBA8(byte r=255, byte b=255, byte g=255, byte a=255) :r(r), g(g), b(b), a(a)
+		ColorRGBA8(byte r=255, byte g=255, byte b=255, byte a=255) :r(r), g(g), b(b), a(a)
 		{
 		}
 	};
