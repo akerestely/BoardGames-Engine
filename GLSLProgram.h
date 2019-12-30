@@ -1,6 +1,8 @@
 #pragma once
 #include "glm.hpp"
 
+#include <cstdint>
+
 namespace Engine
 {
 	class GLSLProgram
@@ -13,20 +15,20 @@ namespace Engine
 
 		void AddAttribute(const char* attribName);
 
-		uint GetUniformLocation(const char* uniformName);
+		uint32_t GetUniformLocation(const char* uniformName);
 		void UploadUniform(const char* uniformName, int val);
 		void UploadUniform(const char* uniformName, const glm::mat4 &projectionMatrix);
 
 		void Use();
 		void UnUse();
 	private:
-		void compileShader(const char* filePath, uint id);
+		void compileShader(const char* filePath, uint32_t id);
 
-		uint m_numAtrtrib;
-		uint m_programId;
+		uint32_t m_numAtrtrib;
+		uint32_t m_programId;
 
-		uint m_vertexShaderId;
-		uint m_fragmentShaderId;
+		uint32_t m_vertexShaderId;
+		uint32_t m_fragmentShaderId;
 	};
 }
 

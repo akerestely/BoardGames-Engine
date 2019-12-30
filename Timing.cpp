@@ -1,4 +1,3 @@
-#include "BaseTypes.h"
 #include "Timing.h"
 
 #include <cstring>
@@ -7,14 +6,14 @@
 
 namespace Engine
 {
-	void FpsLimiter::Init(uint targetFps)
+	void FpsLimiter::Init(uint32_t targetFps)
 	{
 		m_currentFrame = 0;
 		memset(m_frameTimes, 0, sizeof(m_frameTimes));
 		SetMaxFps(targetFps);
 	}
 
-	void FpsLimiter::SetMaxFps(uint targetFps)
+	void FpsLimiter::SetMaxFps(uint32_t targetFps)
 	{
 		m_maxFps = targetFps;
 		m_maxFrameTime = 1000.f / m_maxFps;
@@ -27,11 +26,11 @@ namespace Engine
 
 	float FpsLimiter::End(bool bLimit /*= true*/)
 {
-		uint currentTicks = SDL_GetTicks();
-		uint frameTime = currentTicks - m_startTicks;
+		uint32_t currentTicks = SDL_GetTicks();
+		uint32_t frameTime = currentTicks - m_startTicks;
 		if (bLimit && frameTime < m_maxFrameTime)
 		{
-			uint msToWait = (uint)m_maxFrameTime - frameTime;
+			uint32_t msToWait = (uint32_t)m_maxFrameTime - frameTime;
 			SDL_Delay(msToWait);
 			// calculate new frame time, as we slept some time (this should be ~maxFrameTime)
 			currentTicks = SDL_GetTicks();

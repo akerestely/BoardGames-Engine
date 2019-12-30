@@ -1,4 +1,3 @@
-#include "BaseTypes.h"
 #include "Window.h"
 
 #include "Errors.h"
@@ -21,7 +20,7 @@ namespace Engine
 			SDL_DestroyWindow(m_pSdlWindow);
 	}
 
-	void Window::Create(const char* windowTitle, uint screenWidth, uint screenHeight, uint currentFlags)
+	void Window::Create(const char* windowTitle, uint32_t screenWidth, uint32_t screenHeight, uint32_t currentFlags)
 	{
 		Uint32 flags = SDL_WINDOW_OPENGL;
 		if (currentFlags & INVISIBLE)

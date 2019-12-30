@@ -1,4 +1,3 @@
-#include "BaseTypes.h"
 #include "SpriteBatch.h"
 
 #include <algorithm>
@@ -7,7 +6,7 @@
 
 namespace Engine
 {
-	Glyph::Glyph(const glm::vec4 &destRect, const glm::vec4 &uvRect, uint texture, float depth, const ColorRGBA8 &color) :
+	Glyph::Glyph(const glm::vec4 &destRect, const glm::vec4 &uvRect, uint32_t texture, float depth, const ColorRGBA8 &color) :
 		texture(texture),
 		depth(depth)
 	{
@@ -28,7 +27,7 @@ namespace Engine
 		topRight.SetUV(uvRect.x + uvRect.z, uvRect.y + uvRect.w);
 	}
 
-	RenderBatch::RenderBatch(uint offset, uint numVertices, uint texture) :
+	RenderBatch::RenderBatch(uint32_t offset, uint32_t numVertices, uint32_t texture) :
 		offset(offset),
 		numVertices(numVertices),
 		texture(texture)
@@ -56,7 +55,7 @@ namespace Engine
 		m_glyphs.clear();
 	}
 
-	void SpriteBatch::Draw(const glm::vec4 &destRect, const glm::vec4 &uvRect, uint texture, float depth, const ColorRGBA8 &color)
+	void SpriteBatch::Draw(const glm::vec4 &destRect, const glm::vec4 &uvRect, uint32_t texture, float depth, const ColorRGBA8 &color)
 	{
 		m_glyphs.emplace_back(destRect, uvRect, texture, depth, color);
 	}
@@ -64,7 +63,7 @@ namespace Engine
 	void SpriteBatch::End()
 	{
 		m_glyphPointers.resize(m_glyphs.size());
-		for (uint i = 0; i < m_glyphs.size(); i++)
+		for (uint32_t i = 0; i < m_glyphs.size(); i++)
 			m_glyphPointers[i] = &m_glyphs[i];
 
 		sortGlyphs();
@@ -75,7 +74,7 @@ namespace Engine
 	{
 		/*opengl > 3*/ //glBindVertexArray(vao);
 		/*opengl 2.1*/ bindBufferAndAttribs();
-		for (uint i = 0; i < m_renderBatches.size(); i++)
+		for (uint32_t i = 0; i < m_renderBatches.size(); i++)
 		{
 			glBindTexture(GL_TEXTURE_2D, m_renderBatches[i].texture);
 			glDrawArrays(GL_TRIANGLES, m_renderBatches[i].offset, m_renderBatches[i].numVertices);
@@ -105,7 +104,7 @@ namespace Engine
 		vertices[cv++] = m_glyphPointers[0]->topLeft;
 		offset += 6;
 
-		for (uint cg = 1; cg < m_glyphPointers.size(); cg++)
+		for (uint32_t cg = 1; cg < m_glyphPointers.size(); cg++)
 		{
 			if (m_glyphPointers[cg]->texture != m_glyphPointers[cg - 1]->texture)
 			{

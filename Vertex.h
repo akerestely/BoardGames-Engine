@@ -1,16 +1,17 @@
 #pragma once
-#include "BaseTypes.h"
 #include "Position.h"
+
+#include <cstdint>
 
 namespace Engine
 {
 	struct ColorRGBA8
 	{
-		byte r;
-		byte g;
-		byte b;
-		byte a;
-		ColorRGBA8(byte r=255, byte g=255, byte b=255, byte a=255) :r(r), g(g), b(b), a(a)
+		uint8_t r;
+		uint8_t g;
+		uint8_t b;
+		uint8_t a;
+		ColorRGBA8(uint8_t r=255, uint8_t g=255, uint8_t b=255, uint8_t a=255) :r(r), g(g), b(b), a(a)
 		{
 		}
 	};
@@ -33,7 +34,7 @@ namespace Engine
 			position.y=y;
 		}
 
-		void SetColor(byte r, byte g, byte b, byte a)
+		void SetColor(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 		{
 			color.r = r;
 			color.g = g;

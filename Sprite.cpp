@@ -1,4 +1,3 @@
-#include "BaseTypes.h"
 #include "Sprite.h"
 
 #include "glew.h"

@@ -1,11 +1,10 @@
-#include "BaseTypes.h"
 #include "InputManager.h"
 #include "SDL_keycode.h"
 #include "SDL_mouse.h"
 
 namespace Engine
 {
-	uint KeyToSDLKey(Key keyId)
+	uint32_t KeyToSDLKey(Key keyId)
 	{
 		switch (keyId)
 		{
@@ -36,7 +35,7 @@ namespace Engine
 		return 0;
 	}
 
-	Key SDLKeyToKey(uint keyId)
+	Key SDLKeyToKey(uint32_t keyId)
 	{
 		switch (keyId)
 		{
@@ -80,7 +79,7 @@ namespace Engine
 		m_registeredCallbacks[eventType].push_back(callback);
 	}
 
-	void InputManager::PressKey(uint keyID)
+	void InputManager::PressKey(uint32_t keyID)
 	{
 		m_keyMap[keyID] = true;
 
@@ -89,7 +88,7 @@ namespace Engine
 			callback(&key);
 	}
 
-	void InputManager::ReleaseKey(uint keyID)
+	void InputManager::ReleaseKey(uint32_t keyID)
 	{
 		m_keyMap[keyID] = false;
 

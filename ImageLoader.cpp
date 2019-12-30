@@ -1,4 +1,3 @@
-#include "BaseTypes.h"
 #include "ImageLoader.h"
 
 #include "glew.h"
@@ -6,14 +5,16 @@
 #include "IOManager.h"
 #include "Errors.h"
 
+#include <cstdint>
+
 namespace Engine
 {
 	Engine::Texture ImageLoader::LoadPNG(const char* filepPath)
 	{
 		Texture texture = {};
 
-		std::vector<byte> in;
-		std::vector<byte> out;
+		std::vector<uint8_t> in;
+		std::vector<uint8_t> out;
 		unsigned long width, height;
 
 		if(!IOManager::ReadFileToBuffer(filepPath, in))

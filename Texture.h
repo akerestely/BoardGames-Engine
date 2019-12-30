@@ -1,11 +1,13 @@
 #pragma once
 #include "Size.h"
 
+#include <cstdint>
+
 namespace Engine
 {
 	struct Texture
 	{
-		uint id;
+		uint32_t id;
 		sizei size;
 	};
 }

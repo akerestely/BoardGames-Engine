@@ -1,9 +1,10 @@
 #pragma once
-#include "BaseTypes.h"
 #include "Window.h"
 #include "InputManager.h"
 #include "Timing.h"
 #include "Size.h"
+
+#include <cstdint>
 
 namespace Engine
 {
@@ -19,9 +20,9 @@ namespace Engine
 		virtual void onRender() {};
 		virtual void onDestroy() {};
 
-		void setMaxFps(uint maxFps);
+		void setMaxFps(uint32_t maxFps);
 		float getFps() const { return m_fps; }
-		uint getTime() const;
+		uint32_t getTime() const;
 
 	protected:
 		sizei m_screenSize = { 800, 600 };
@@ -47,7 +48,7 @@ namespace Engine
 		State m_gameState;
 
 		FpsLimiter m_fpsLimiter;
-		uint m_maxFps = 60;
+		uint32_t m_maxFps = 60;
 		float m_fps = 0;
 
 		bool m_bLimitFps = true;

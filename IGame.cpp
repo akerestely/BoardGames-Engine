@@ -15,13 +15,13 @@ namespace Engine
 		onDestroy();
 	}
 
-	void IGame::setMaxFps(uint maxFps)
+	void IGame::setMaxFps(uint32_t maxFps)
 	{
 		m_maxFps = maxFps;
 		m_fpsLimiter.SetMaxFps(maxFps);
 	}
 
-	uint IGame::getTime() const
+	uint32_t IGame::getTime() const
 	{
 		return SDL_GetTicks();
 	}

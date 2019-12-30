@@ -1,13 +1,16 @@
 #pragma once
+#include <cstdint>
 
 namespace Engine
 {
 	class FpsLimiter
 	{
 	public:
-		void Init(uint targetFps);
+		FpsLimiter() = default;
 
-		void SetMaxFps(uint targetFps);
+		void Init(uint32_t targetFps);
+
+		void SetMaxFps(uint32_t targetFps);
 
 		void Begin();
 
@@ -19,14 +22,14 @@ namespace Engine
 		float calculateFps();
 
 	private:
-		static const uint kNumSamples = 10;
+		static const uint32_t kNumSamples = 10;
 
-		uint m_frameTimes[kNumSamples];
+		uint32_t m_frameTimes[kNumSamples];
 
-		uint m_maxFps;
+		uint32_t m_maxFps;
 		float m_maxFrameTime;
 
-		uint m_startTicks;
-		uint m_currentFrame;
+		uint32_t m_startTicks;
+		uint32_t m_currentFrame;
 	};
 }

@@ -1,4 +1,3 @@
-#include "BaseTypes.h"
 #include "GLSLProgram.h"
 
 #include <fstream>
@@ -81,9 +80,9 @@ namespace Engine
 		glBindAttribLocation(m_programId, m_numAtrtrib++, attribName);
 	}
 
-	uint GLSLProgram::GetUniformLocation(const char* uniformName)
+	uint32_t GLSLProgram::GetUniformLocation(const char* uniformName)
 	{
-		uint location = glGetUniformLocation(m_programId, uniformName);
+		uint32_t location = glGetUniformLocation(m_programId, uniformName);
 		if (location == GL_INVALID_INDEX)
 			fatalError(std::string("Uniform \"") + uniformName + "\" not found in shader");
 		return location;
@@ -100,7 +99,7 @@ namespace Engine
 
 	void GLSLProgram::UploadUniform(const char* uniformName, const glm::mat4 &projectionMatrix)
 	{
-		uint location = glGetUniformLocation(m_programId, uniformName);
+		uint32_t location = glGetUniformLocation(m_programId, uniformName);
 		if (location == GL_INVALID_INDEX)
 			fatalError(std::string("Uniform \"") + uniformName + "\" not found in shader");
 		glUniformMatrix4fv(location, 1, GL_FALSE, &projectionMatrix[0][0]);
@@ -109,17 +108,17 @@ namespace Engine
 	void GLSLProgram::Use()
 	{
 		glUseProgram(m_programId);
-		for (uint i = 0; i < m_numAtrtrib; i++)
+		for (uint32_t i = 0; i < m_numAtrtrib; i++)
 			glEnableVertexAttribArray(i);
 	}
 	void GLSLProgram::UnUse()
 	{
 		glUseProgram(0);
-		for (uint i = 0; i < m_numAtrtrib; i++)
+		for (uint32_t i = 0; i < m_numAtrtrib; i++)
 			glDisableVertexAttribArray(i);
 	}
 
-	void GLSLProgram::compileShader(const char* filePath, uint id)
+	void GLSLProgram::compileShader(const char* filePath, uint32_t id)
 	{
 		std::ifstream file(filePath);
 		if (file.fail())

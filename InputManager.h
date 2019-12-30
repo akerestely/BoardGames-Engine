@@ -2,6 +2,7 @@
 #include <map>
 #include <unordered_map>
 #include <functional>
+#include <cstdint>
 
 #include "glm.hpp"
 
@@ -55,8 +56,8 @@ namespace Engine
 
 		void Register(EventType eventType, TCallback callback);
 
-		void PressKey(uint keyID);
-		void ReleaseKey(uint keyID);
+		void PressKey(uint32_t keyID);
+		void ReleaseKey(uint32_t keyID);
 
 		bool IsKeyDown(Key keyID);
 
@@ -67,7 +68,7 @@ namespace Engine
 		glm::ivec2 GetMouseCoordsRel() const { return m_mouseCoordsRel; }
 
 	private:
-		std::unordered_map<uint, bool> m_keyMap;
+		std::unordered_map<uint32_t, bool> m_keyMap;
 		glm::ivec2 m_mouseCoords;
 		glm::ivec2 m_mouseCoordsRel;
 

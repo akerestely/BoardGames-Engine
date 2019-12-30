@@ -15,9 +15,9 @@ namespace Engine
 			Texture
 		};
 
-		Glyph(const glm::vec4 &destRect, const glm::vec4 &uvRect, uint texture, float depth, const ColorRGBA8 &color);
+		Glyph(const glm::vec4 &destRect, const glm::vec4 &uvRect, uint32_t texture, float depth, const ColorRGBA8 &color);
 
-		uint texture;
+		uint32_t texture;
 		float depth;
 
 		Vertex topLeft;
@@ -28,11 +28,11 @@ namespace Engine
 
 	struct RenderBatch
 	{
-		RenderBatch(uint offset, uint numVertices, uint texture);
+		RenderBatch(uint32_t offset, uint32_t numVertices, uint32_t texture);
 
-		uint offset;
-		uint numVertices;
-		uint texture;
+		uint32_t offset;
+		uint32_t numVertices;
+		uint32_t texture;
 	};
 
 	class SpriteBatch
@@ -43,7 +43,7 @@ namespace Engine
 		void Init();
 
 		void Begin(Glyph::SortType sortType = Glyph::SortType::Texture);
-		void Draw(const glm::vec4 &destRect, const glm::vec4 &uvRect, uint texture, float depth, const ColorRGBA8 &color);
+		void Draw(const glm::vec4 &destRect, const glm::vec4 &uvRect, uint32_t texture, float depth, const ColorRGBA8 &color);
 		void End();
 
 		void RenderBatches();
@@ -56,8 +56,8 @@ namespace Engine
 		void sortGlyphs();
 
 	private:
-		uint m_vbo;
-		uint m_vao;
+		uint32_t m_vbo;
+		uint32_t m_vao;
 
 		Glyph::SortType m_sortType;
 

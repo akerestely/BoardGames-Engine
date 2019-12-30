@@ -1,6 +1,8 @@
 #pragma once
 #include "Size.h"
 
+#include <cstdint>
+
 struct SDL_Window;
 
 namespace Engine
@@ -13,7 +15,7 @@ namespace Engine
 		Window();
 		~Window();
 
-		void Create(const char* windowTitle, uint screenWidth, uint screenHeight, uint currentFlags);
+		void Create(const char* windowTitle, uint32_t screenWidth, uint32_t screenHeight, uint32_t currentFlags);
 
 		void SwappBuffer();
 

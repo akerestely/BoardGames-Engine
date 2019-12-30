@@ -16,7 +16,7 @@ namespace Engine
 		void Draw();
 
 	private:
-		uint m_vboId;
+		uint32_t m_vboId;
 		rectf m_bounds;
 		Texture m_texture;
 	};
